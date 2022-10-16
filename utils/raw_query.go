@@ -17,7 +17,7 @@ const (
 	USER_GET_BY_ID         = USER_GET_ALL + " WHERE id = $1"
 	USER_GET_BY_NAME       = USER_GET_ALL + " WHERE name like $1"
 
-	USER_INSERT = "INSERT INTO users(id, username, name) VALUES (:id, :username, :name,)"
+	USER_INSERT = "INSERT INTO users(id, name, username, password) VALUES (:id, :name, :username, :password)"
 	USER_UPDATE = "UPDATE users SET name=:name, where id=:id"
 	USER_DELETE = "DELETE from users WHERE id=$1"
 	// ===========================================================
