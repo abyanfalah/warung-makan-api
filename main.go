@@ -54,7 +54,7 @@ func viewConfigs() {
 
 	fmt.Println("configs: ")
 	fmt.Println("db config:", config.DbConfig)
-	fmt.Println("api config:", config.ApiConfig)
+	fmt.Println("api config (port maybe auto set):", config.ApiConfig)
 
 	fmt.Println(strings.Repeat("=", 50))
 
