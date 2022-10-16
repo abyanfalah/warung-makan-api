@@ -25,7 +25,7 @@ type TransactionRepository interface {
 func (p *transactionRepository) GetAll() ([]model.Transaction, error) {
 	var transactions []model.Transaction
 
-	err := p.db.Select(&transactions, utils.TRANSACTION_GET_ALL+" order by created_at")
+	err := p.db.Select(&transactions, utils.TRANSACTION_GET_ALL+" order by created_at desc")
 	if err != nil {
 		return nil, err
 	}
@@ -52,6 +52,17 @@ func (p *transactionRepository) GetAllPaginated(page int, rows int) ([]model.Tra
 	if err != nil {
 		return nil, err
 	}
+
+	tdRepo := NewTransactionDetailRepository(p.db)
+
+	for i, transaction := range transactions {
+		items, err := tdRepo.GetByTrasactionId(transaction.Id)
+		if err != nil {
+			panic(err)
+		}
+		transactions[i].Items = items
+	}
+
 	return transactions, nil
 }
 
@@ -61,6 +72,15 @@ func (p *transactionRepository) GetById(id string) (model.Transaction, error) {
 	if err != nil {
 		return model.Transaction{}, err
 	}
+
+	tdRepo := NewTransactionDetailRepository(p.db)
+
+	items, err := tdRepo.GetByTrasactionId(transaction.Id)
+	if err != nil {
+		panic(err)
+	}
+	transaction.Items = items
+
 	return transaction, nil
 }
 
@@ -72,8 +92,9 @@ func (p *transactionRepository) Insert(newTransaction *model.Transaction) (model
 	}
 	_, err = tx.NamedExec(utils.TRANSACTION_INSERT, newTransaction)
 	if err != nil {
-		panic(err)
+		panic("gagal insert transaksi")
 	}
+
 	for _, each := range newTransaction.Items {
 		_, err = tx.NamedExec(utils.TRANSACTION_DETAIL_INSERT, each)
 		if err != nil {
@@ -82,7 +103,7 @@ func (p *transactionRepository) Insert(newTransaction *model.Transaction) (model
 
 		_, err = tx.NamedExec(utils.MENU_UPDATE_STOCK, each)
 		if err != nil {
-			panic(err)
+			panic("gagal update stok")
 		}
 	}
 

@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"net/http"
-
 	"warung-makan/manager"
 	"warung-makan/model"
 	"warung-makan/utils"
@@ -42,6 +40,11 @@ func (c *UserController) CreateNewUser(ctx *gin.Context) {
 		return
 	}
 
+	// duplicate, err := c.ucMan.UserUsecase().GetById(user.Id)
+	// if err != nil {
+	// 	utils.JsonErrorBadRequest(ctx, err, "user duplicate")
+	// }
+
 	user.Id = utils.GenerateId()
 	newUser, err := c.ucMan.UserUsecase().Insert(&user)
 	if err != nil {
@@ -49,7 +52,7 @@ func (c *UserController) CreateNewUser(ctx *gin.Context) {
 		return
 	}
 
-	utils.JsonDataResponse(ctx, newUser)
+	utils.JsonDataMessageResponse(ctx, newUser, "user created")
 }
 
 func (c *UserController) UpdateUser(ctx *gin.Context) {
@@ -64,14 +67,11 @@ func (c *UserController) UpdateUser(ctx *gin.Context) {
 	user.Id = ctx.Param("id")
 	updatedUser, err := c.ucMan.UserUsecase().Update(&user)
 	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "insert failed")
+		utils.JsonErrorBadGateway(ctx, err, "update failed")
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"updated_user": updatedUser,
-		"message":      "user updated",
-	})
+	utils.JsonDataMessageResponse(ctx, updatedUser, "user updated")
 }
 
 func (c *UserController) DeleteUser(ctx *gin.Context) {

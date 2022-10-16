@@ -12,7 +12,7 @@ func JsonDataResponse(ctx *gin.Context, data interface{}) {
 	})
 }
 
-func JsonCreatedResponse(ctx *gin.Context, data interface{}, message string) {
+func JsonDataMessageResponse(ctx *gin.Context, data interface{}, message string) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"data":    data,
 		"message": message,

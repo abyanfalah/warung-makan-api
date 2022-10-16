@@ -1,8 +1,8 @@
 package utils
 
 const (
-	MENU_GET_ALL           = "SELECT id, name, price, stock, created_at, updated_at FROM menu"
-	MENU_GET_ALL_PAGINATED = "SELECT id, name, price, stock, created_at, updated_at FROM menu limit $1 offset $2"
+	MENU_GET_ALL           = "SELECT id, name, price, stock FROM menu"
+	MENU_GET_ALL_PAGINATED = "SELECT id, name, price, stock FROM menu limit $1 offset $2"
 	MENU_GET_BY_ID         = MENU_GET_ALL + " WHERE id = $1"
 	MENU_GET_BY_NAME       = MENU_GET_ALL + " WHERE name like $1"
 
@@ -32,8 +32,8 @@ const (
 	TRANSACTION_DELETE = "DELETE from transaction WHERE id=$1"
 	// ==============================================================
 
-	TRANSACTION_DETAIL_INSERT                = "INSERT INTO transaction_detail(id, transaction_id, product_id, qty, subtotal) VALUES (:id, :transaction_id, :product_id, :qty, :subtotal)"
-	TRANSACTION_DETAIL_GET_ALL               = "SELECT id, product_id, qty, subtotal from transaction_detail "
+	TRANSACTION_DETAIL_INSERT                = "INSERT INTO transaction_detail(transaction_id, menu_id, qty, subtotal) VALUES ( :transaction_id, :menu_id, :qty, :subtotal)"
+	TRANSACTION_DETAIL_GET_ALL               = "SELECT transaction_id, menu_id, qty, subtotal from transaction_detail "
 	TRANSACTION_DETAIL_GET_BY_ID_TRANSACTION = TRANSACTION_DETAIL_GET_ALL + " where transaction_id = $1"
 	// ==============================================================
 

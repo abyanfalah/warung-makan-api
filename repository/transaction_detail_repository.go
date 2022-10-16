@@ -63,7 +63,7 @@ func (p *transactionDetailRepository) GetByTrasactionId(id string) ([]model.Tran
 }
 
 func (p *transactionDetailRepository) Insert(newTransactionDetail *model.TransactionDetail) (model.TransactionDetail, error) {
-	newTransactionDetail.Id = utils.GenerateId()
+
 	_, err := p.db.NamedExec(utils.TRANSACTION_INSERT, newTransactionDetail)
 	if err != nil {
 		return model.TransactionDetail{}, err
