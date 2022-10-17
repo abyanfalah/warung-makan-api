@@ -15,7 +15,7 @@ type UserRepository interface {
 	GetAllPaginated(page int, rows int) ([]model.User, error)
 	GetAll() ([]model.User, error)
 	GetById(id string) (model.User, error)
-	// GetByName(name string) ([]model.User, error)
+	GetByCredentials(username, password string) (model.User, error)
 
 	Insert(user *model.User) (model.User, error)
 	Update(user *model.User) (model.User, error)
@@ -47,6 +47,15 @@ func (p *userRepository) GetAllPaginated(page int, rows int) ([]model.User, erro
 func (p *userRepository) GetById(id string) (model.User, error) {
 	var user model.User
 	err := p.db.Get(&user, utils.USER_GET_BY_ID, id)
+	if err != nil {
+		return model.User{}, err
+	}
+	return user, nil
+}
+
+func (p *userRepository) GetByCredentials(username, password string) (model.User, error) {
+	var user model.User
+	err := p.db.Get(&user, utils.USER_GET_BY_CREDENTIALS, username, password)
 	if err != nil {
 		return model.User{}, err
 	}

@@ -1,9 +1,12 @@
 package controller
 
 import (
+	"warung-makan/config"
 	"warung-makan/manager"
+	"warung-makan/middleware"
 	"warung-makan/model"
 	"warung-makan/utils"
+	"warung-makan/utils/authenticator"
 
 	"github.com/gin-gonic/gin"
 )
@@ -101,12 +104,14 @@ func NewTransactionController(usecaseManager manager.UsecaseManager, router *gin
 		ucMan:  usecaseManager,
 		router: router,
 	}
+	authMiddleware := middleware.NewAuthTokenMiddleware(authenticator.NewAccessToken(config.NewConfig().TokenConfig))
 
-	router.GET("/transaction", controller.ListTransaction)
-	router.GET("/transaction/:id", controller.GetById)
-	router.POST("/transaction", controller.CreateNewTransaction)
-	router.PUT("/transaction/:id", controller.UpdateTransaction)
-	router.DELETE("/transaction/:id", controller.DeleteTransaction)
+	protectedRoute := router.Group("/transaction", authMiddleware.RequireToken())
+	protectedRoute.GET("/", controller.ListTransaction)
+	protectedRoute.GET("/:id", controller.GetById)
+	protectedRoute.POST("/", controller.CreateNewTransaction)
+	protectedRoute.PUT("/:id", controller.UpdateTransaction)
+	protectedRoute.DELETE("/:id", controller.DeleteTransaction)
 
 	return &controller
 }

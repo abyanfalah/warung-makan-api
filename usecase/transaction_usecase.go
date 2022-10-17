@@ -13,7 +13,7 @@ type TransactionUsecase interface {
 	GetAll() ([]model.Transaction, error)
 	GetAllPaginated(page int, rows int) ([]model.Transaction, error)
 	GetById(id string) (model.Transaction, error)
-	// GetByName(name string) ([]model.Transaction, error)
+
 	Insert(transaction *model.Transaction) (model.Transaction, error)
 	Update(transaction *model.Transaction) (model.Transaction, error)
 	Delete(id string) error

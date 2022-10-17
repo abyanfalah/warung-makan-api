@@ -13,7 +13,8 @@ type UserUsecase interface {
 	GetAll() ([]model.User, error)
 	GetAllPaginated(page int, rows int) ([]model.User, error)
 	GetById(id string) (model.User, error)
-	// GetByName(name string) ([]model.User, error)
+	GetByCredentials(username, password string) (model.User, error)
+
 	Insert(user *model.User) (model.User, error)
 	Update(user *model.User) (model.User, error)
 	Delete(id string) error
@@ -30,6 +31,10 @@ func (p *userUsecase) GetAllPaginated(page int, rows int) ([]model.User, error) 
 
 func (p *userUsecase) GetById(id string) (model.User, error) {
 	return p.userRepository.GetById(id)
+}
+
+func (p *userUsecase) GetByCredentials(username, password string) (model.User, error) {
+	return p.userRepository.GetByCredentials(username, password)
 }
 
 func (p *userUsecase) Insert(newUser *model.User) (model.User, error) {

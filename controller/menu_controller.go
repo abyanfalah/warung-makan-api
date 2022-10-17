@@ -1,9 +1,12 @@
 package controller
 
 import (
+	"warung-makan/config"
 	"warung-makan/manager"
+	"warung-makan/middleware"
 	"warung-makan/model"
 	"warung-makan/utils"
+	"warung-makan/utils/authenticator"
 
 	"github.com/gin-gonic/gin"
 )
@@ -89,12 +92,15 @@ func NewMenuController(usecaseManager manager.UsecaseManager, router *gin.Engine
 		ucMan:  usecaseManager,
 		router: router,
 	}
+	authMiddleware := middleware.NewAuthTokenMiddleware(authenticator.NewAccessToken(config.NewConfig().TokenConfig))
 
 	router.GET("/menu", controller.ListMenu)
 	router.GET("/menu/:id", controller.GetById)
-	router.POST("/menu", controller.CreateNewMenu)
-	router.PUT("/menu/:id", controller.UpdateMenu)
-	router.DELETE("/menu/:id", controller.DeleteMenu)
+
+	protectedRoute := router.Group("/menu", authMiddleware.RequireToken())
+	protectedRoute.POST("/", controller.CreateNewMenu)
+	protectedRoute.PUT("/:id", controller.UpdateMenu)
+	protectedRoute.DELETE("/:id", controller.DeleteMenu)
 
 	return &controller
 }

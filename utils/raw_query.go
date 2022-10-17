@@ -12,10 +12,11 @@ const (
 	MENU_DELETE       = "DELETE from menu WHERE id=$1"
 	// ===========================================================
 
-	USER_GET_ALL           = "SELECT id, name, username  FROM users"
-	USER_GET_ALL_PAGINATED = "SELECT id, name, username  FROM users limit $1 offset $2"
-	USER_GET_BY_ID         = USER_GET_ALL + " WHERE id = $1"
-	USER_GET_BY_NAME       = USER_GET_ALL + " WHERE name like $1"
+	USER_GET_ALL            = "SELECT id, name, username  FROM users"
+	USER_GET_ALL_PAGINATED  = "SELECT id, name, username  FROM users limit $1 offset $2"
+	USER_GET_BY_ID          = USER_GET_ALL + " WHERE id = $1"
+	USER_GET_BY_NAME        = USER_GET_ALL + " WHERE name like $1"
+	USER_GET_BY_CREDENTIALS = USER_GET_ALL + " WHERE username=$1 AND password=$2"
 
 	USER_INSERT = "INSERT INTO users(id, name, username, password) VALUES (:id, :name, :username, :password)"
 	USER_UPDATE = "UPDATE users SET name=:name, username=:username, password=:password where id=:id"

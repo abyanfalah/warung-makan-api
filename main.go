@@ -6,6 +6,7 @@ import (
 	"strings"
 	"warung-makan/config"
 	"warung-makan/server"
+	"warung-makan/utils/authenticator"
 )
 
 const (
@@ -64,4 +65,17 @@ func viewConfigs() {
 
 	fmt.Println()
 
+}
+
+func testVerifyToken() {
+	config := config.NewConfig()
+
+	accessToken := authenticator.NewAccessToken(config.TokenConfig)
+	tokenString := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjYwMjg5NDMsImlhdCI6MTY2NjAyNTM0MywiaXNzIjoid2FydW5nX21ha2FuX2VuaWdtYSIsInVzZXJfaWQiOiIxOTRlZWM5NC1mNjkxLTRkOTgtYWU5Yi1jNGU2NTllNzcyNTciLCJ1c2VybmFtZSI6ImFub24ifQ.fO5gML3Mi2dTmgnAPwEL7w_gd6uBxiXZITQm1ZdWDJw"
+	t, err := accessToken.VerifyToken(tokenString)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(t)
 }

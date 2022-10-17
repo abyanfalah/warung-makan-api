@@ -1,9 +1,12 @@
 package controller
 
 import (
+	"warung-makan/config"
 	"warung-makan/manager"
+	"warung-makan/middleware"
 	"warung-makan/model"
 	"warung-makan/utils"
+	"warung-makan/utils/authenticator"
 
 	"github.com/gin-gonic/gin"
 )
@@ -94,12 +97,15 @@ func NewUserController(usecaseManager manager.UsecaseManager, router *gin.Engine
 		ucMan:  usecaseManager,
 		router: router,
 	}
+	authMiddleware := middleware.NewAuthTokenMiddleware(authenticator.NewAccessToken(config.NewConfig().TokenConfig))
 
 	router.GET("/user", controller.ListUser)
 	router.GET("/user/:id", controller.GetById)
-	router.POST("/user", controller.CreateNewUser)
-	router.PUT("/user/:id", controller.UpdateUser)
-	router.DELETE("/user/:id", controller.DeleteUser)
+
+	protectedRoute := router.Group("/user", authMiddleware.RequireToken())
+	protectedRoute.POST("/", controller.CreateNewUser)
+	protectedRoute.PUT("/:id", controller.UpdateUser)
+	protectedRoute.DELETE("/:id", controller.DeleteUser)
 
 	return &controller
 }

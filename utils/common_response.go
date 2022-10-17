@@ -19,6 +19,13 @@ func JsonDataMessageResponse(ctx *gin.Context, data interface{}, message string)
 	})
 }
 
+func JsonNamedDataMessageResponse(ctx *gin.Context, keyName string, data interface{}, message string) {
+	ctx.JSON(http.StatusOK, gin.H{
+		keyName:   data,
+		"message": message,
+	})
+}
+
 func JsonSuccessMessage(ctx *gin.Context, message string) {
 	ctx.AbortWithStatusJSON(http.StatusOK, gin.H{
 		"message": message,
@@ -34,6 +41,13 @@ func JsonErrorBadGateway(ctx *gin.Context, err error, message string) {
 
 func JsonErrorBadRequest(ctx *gin.Context, err error, message string) {
 	ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+		"error":   err.Error(),
+		"message": message,
+	})
+}
+
+func JsonErrorUnauthorized(ctx *gin.Context, err error, message string) {
+	ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 		"error":   err.Error(),
 		"message": message,
 	})
