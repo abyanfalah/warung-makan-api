@@ -18,6 +18,8 @@ const (
 
 	API_HOST = "localhost"
 	API_PORT = "8000"
+
+	APP_NAME = "warung_makan_enigma"
 )
 
 func main() {
@@ -42,6 +44,8 @@ func setEnv() {
 
 	os.Setenv("API_HOST", API_HOST)
 	os.Setenv("API_PORT", API_PORT)
+
+	os.Setenv("APP_NAME", APP_NAME)
 
 	fmt.Println("Setting finished")
 	fmt.Println(strings.Repeat("=", 50))

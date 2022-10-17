@@ -1,6 +1,11 @@
 package config
 
-import "os"
+import (
+	"os"
+	"time"
+
+	"github.com/golang-jwt/jwt/v4"
+)
 
 type DbConfig struct {
 	Host     string
@@ -16,9 +21,17 @@ type ApiConfig struct {
 	Port string
 }
 
+type TokenConfig struct {
+	ApplicationName     string
+	JwtSignatureKey     string
+	JwtSigningMethod    *jwt.SigningMethodHMAC
+	AccessTokenLifetime time.Duration
+}
+
 type Config struct {
 	DbConfig
 	ApiConfig
+	TokenConfig
 }
 
 func (c *Config) readConfig() {
@@ -34,6 +47,13 @@ func (c *Config) readConfig() {
 	c.ApiConfig = ApiConfig{
 		Host: os.Getenv("API_HOST"),
 		Port: os.Getenv("API_PORT"),
+	}
+
+	c.TokenConfig = TokenConfig{
+		ApplicationName:     os.Getenv("APP_NAME"),
+		JwtSignatureKey:     "asdf",
+		JwtSigningMethod:    jwt.SigningMethodHS256,
+		AccessTokenLifetime: time.Minute * 30,
 	}
 }
 
