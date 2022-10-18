@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"net/http"
 	"warung-makan/config"
 	"warung-makan/manager"
 	"warung-makan/middleware"
@@ -36,19 +37,33 @@ func (c *UserController) GetById(ctx *gin.Context) {
 
 func (c *UserController) CreateNewUser(ctx *gin.Context) {
 	var user model.User
+	c.router.MaxMultipartMemory = 8 << 20
 
-	err := ctx.ShouldBindJSON(&user)
+	err := ctx.ShouldBind(&user)
 	if err != nil {
-		utils.JsonErrorBadRequest(ctx, err, "cant bind struct")
+		// utils.JsonErrorBadRequest(ctx, err, "cant bind struct")
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+			"data":  user,
+		})
 		return
 	}
 
-	// duplicate, err := c.ucMan.UserUsecase().GetById(user.Id)
-	// if err != nil {
-	// 	utils.JsonErrorBadRequest(ctx, err, "user duplicate")
-	// }
+	imageFile, err := ctx.FormFile("image_file")
+	if err != nil {
+		utils.JsonErrorBadRequest(ctx, err, "cant get image")
+	}
 
 	user.Id = utils.GenerateId()
+
+	imagePath := "./images/user/" + user.Id + ".jpg"
+	err = ctx.SaveUploadedFile(imageFile, imagePath)
+	if err != nil {
+		utils.JsonErrorBadGateway(ctx, err, "cannot save image")
+		return
+	}
+
+	user.Image = imagePath
 	newUser, err := c.ucMan.UserUsecase().Insert(&user)
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "insert failed")

@@ -40,8 +40,7 @@ func (c *MenuController) CreateNewMenu(ctx *gin.Context) {
 
 	err := ctx.ShouldBind(&menu)
 	if err != nil {
-		// utils.JsonErrorBadRequest(ctx, err, "cant bind struct")
-		utils.JsonDataMessageResponse(ctx, menu, "cant bind struct: "+err.Error())
+		utils.JsonErrorBadRequest(ctx, err, "cannot bind struct")
 		return
 	}
 
@@ -49,12 +48,6 @@ func (c *MenuController) CreateNewMenu(ctx *gin.Context) {
 	if err != nil {
 		utils.JsonErrorBadRequest(ctx, err, "cant get image")
 	}
-
-	// utils.JsonDataResponse(ctx, gin.H{
-	// 	"menu":  menu,
-	// 	"image": imageFile,
-	// })
-	// return
 
 	menu.Id = utils.GenerateId()
 	imagePath := "./images/menu/" + menu.Id + ".jpg"
