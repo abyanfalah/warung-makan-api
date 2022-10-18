@@ -119,6 +119,17 @@ func (c *UserController) DeleteUser(ctx *gin.Context) {
 	utils.JsonSuccessMessage(ctx, "User deleted")
 }
 
+func (c *UserController) GetUserImage(ctx *gin.Context) {
+	id := ctx.Param("id")
+	imagePath := "./images/user/" + id + ".jpg"
+	if _, err := os.Stat(imagePath); err != nil {
+		utils.JsonErrorBadRequest(ctx, err, imagePath)
+		return
+	}
+
+	ctx.File(imagePath)
+}
+
 func NewUserController(usecaseManager manager.UsecaseManager, router *gin.Engine) *UserController {
 	controller := UserController{
 		ucMan:  usecaseManager,
@@ -128,6 +139,7 @@ func NewUserController(usecaseManager manager.UsecaseManager, router *gin.Engine
 
 	router.GET("/user", controller.ListUser)
 	router.GET("/user/:id", controller.GetById)
+	router.GET("/user/:id/image", controller.GetUserImage)
 
 	protectedRoute := router.Group("/user", authMiddleware.RequireToken())
 	protectedRoute.POST("/", controller.CreateNewUser)

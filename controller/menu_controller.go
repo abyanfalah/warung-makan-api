@@ -110,9 +110,10 @@ func (c *MenuController) DeleteMenu(ctx *gin.Context) {
 
 func (c *MenuController) GetMenuImage(ctx *gin.Context) {
 	id := ctx.Param("id")
-	imagePath := "./images/" + id + ".jpg"
+	imagePath := "./images/menu/" + id + ".jpg"
 	if _, err := os.Stat(imagePath); err != nil {
-		ctx.File("./images/menu/default.jpg")
+		// ctx.File("./images/menu/default.jpg")
+		utils.JsonErrorBadRequest(ctx, err, imagePath)
 		return
 	}
 
