@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"log"
 	"net/http"
+	"os"
 	"warung-makan/config"
 	"warung-makan/manager"
 	"warung-makan/middleware"
@@ -102,6 +104,11 @@ func (c *UserController) DeleteUser(ctx *gin.Context) {
 	err = c.ucMan.UserUsecase().Delete(user.Id)
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "cannot delete user")
+	}
+
+	err = os.Remove("./images/user/" + user.Id + ".jpg")
+	if err != nil {
+		log.Println(err)
 	}
 
 	utils.JsonSuccessMessage(ctx, "User deleted")

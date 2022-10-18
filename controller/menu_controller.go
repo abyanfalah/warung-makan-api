@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"log"
+	"os"
 	"warung-makan/config"
 	"warung-makan/manager"
 	"warung-makan/middleware"
@@ -96,6 +98,11 @@ func (c *MenuController) DeleteMenu(ctx *gin.Context) {
 	err = c.ucMan.MenuUsecase().Delete(menu.Id)
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "cannot delete menu")
+	}
+
+	err = os.Remove("./images/menu/" + menu.Id + ".jpg")
+	if err != nil {
+		log.Println(err)
 	}
 
 	utils.JsonSuccessMessage(ctx, "Menu deleted")
