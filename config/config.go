@@ -53,7 +53,7 @@ func (c *Config) readConfig() {
 		ApplicationName:     os.Getenv("APP_NAME"),
 		JwtSignatureKey:     "asdf",
 		JwtSigningMethod:    jwt.SigningMethodHS256,
-		AccessTokenLifetime: time.Minute * 60,
+		AccessTokenLifetime: time.Hour * 24,
 	}
 }
 

@@ -63,7 +63,6 @@ func (p *userRepository) GetByCredentials(username, password string) (model.User
 }
 
 func (p *userRepository) Insert(newUser *model.User) (model.User, error) {
-	newUser.Id = utils.GenerateId()
 	_, err := p.db.NamedExec(utils.USER_INSERT, newUser)
 	if err != nil {
 		return model.User{}, err

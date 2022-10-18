@@ -18,7 +18,7 @@ const (
 	USER_GET_BY_NAME        = USER_GET_ALL + " WHERE name like $1"
 	USER_GET_BY_CREDENTIALS = USER_GET_ALL + " WHERE username=$1 AND password=$2"
 
-	USER_INSERT = "INSERT INTO users(id, name, username, password) VALUES (:id, :name, :username, :password)"
+	USER_INSERT = "INSERT INTO users(id, name, username, password, image) VALUES (:id, :name, :username, :password, :image)"
 	USER_UPDATE = "UPDATE users SET name=:name, username=:username, password=:password where id=:id"
 	USER_DELETE = "DELETE from users WHERE id=$1"
 	// ===========================================================

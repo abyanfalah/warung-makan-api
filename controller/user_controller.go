@@ -56,23 +56,28 @@ func (c *UserController) CreateNewUser(ctx *gin.Context) {
 		utils.JsonErrorBadRequest(ctx, err, "cant get image")
 	}
 
-	user.Id = utils.GenerateId()
+	id := utils.GenerateId()
 
-	imagePath := "./images/user/" + user.Id + ".jpg"
+	imagePath := "./images/user/" + id + ".jpg"
 	err = ctx.SaveUploadedFile(imageFile, imagePath)
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "cannot save image")
 		return
 	}
 
-	user.Image = imagePath
-	newUser, err := c.ucMan.UserUsecase().Insert(&user)
+	user.Id = id
+	user.Image = id + ".jpg"
+	user, err = c.ucMan.UserUsecase().Insert(&user)
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "insert failed")
 		return
 	}
 
-	utils.JsonDataMessageResponse(ctx, newUser, "user created")
+	utils.JsonDataMessageResponse(ctx, user, "user created")
+	ctx.JSON(200, gin.H{
+		"uid": user.Id,
+		"id":  id,
+	})
 }
 
 func (c *UserController) UpdateUser(ctx *gin.Context) {

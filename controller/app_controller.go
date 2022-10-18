@@ -115,6 +115,19 @@ func NewController(usecaseManager manager.UsecaseManager, router *gin.Engine) *C
 		})
 	})
 
+	// ==== FILE DOWNLOAD
+	router.GET("/get_image", func(ctx *gin.Context) {
+		q := ctx.Query("q")
+		if q == "" {
+			ctx.File("./images/vueko.jpg")
+			return
+		} else if q == "nyan" {
+			ctx.File("./images/nyan.gif")
+		}
+
+		ctx.File("./images/" + q + ".jpg")
+	})
+
 	protectedRoute := router.Group("/test/protected", tokenMdw.RequireToken())
 	protectedRoute.GET("/secret_place", func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "welcome to the secret place. your token is verified! You can now access all protected endpoints!")

@@ -59,7 +59,7 @@ func (c *MenuController) CreateNewMenu(ctx *gin.Context) {
 		return
 	}
 
-	menu.Image = imagePath
+	menu.Image.String = imagePath
 	newMenu, err := c.ucMan.MenuUsecase().Insert(&menu)
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "insert failed")
@@ -108,6 +108,17 @@ func (c *MenuController) DeleteMenu(ctx *gin.Context) {
 	utils.JsonSuccessMessage(ctx, "Menu deleted")
 }
 
+func (c *MenuController) GetMenuImage(ctx *gin.Context) {
+	id := ctx.Param("id")
+	imagePath := "./images/" + id + ".jpg"
+	if _, err := os.Stat(imagePath); err != nil {
+		ctx.File("./images/menu/default.jpg")
+		return
+	}
+
+	ctx.File(imagePath)
+}
+
 func NewMenuController(usecaseManager manager.UsecaseManager, router *gin.Engine) *MenuController {
 	controller := MenuController{
 		ucMan:  usecaseManager,
@@ -117,6 +128,7 @@ func NewMenuController(usecaseManager manager.UsecaseManager, router *gin.Engine
 
 	router.GET("/menu", controller.ListMenu)
 	router.GET("/menu/:id", controller.GetById)
+	router.GET("/menu/:id/image", controller.GetMenuImage)
 
 	protectedRoute := router.Group("/menu", authMiddleware.RequireToken())
 	protectedRoute.POST("/", controller.CreateNewMenu)
