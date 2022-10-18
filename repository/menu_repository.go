@@ -54,7 +54,6 @@ func (p *menuRepository) GetById(id string) (model.Menu, error) {
 }
 
 func (p *menuRepository) Insert(newMenu *model.Menu) (model.Menu, error) {
-	newMenu.Id = utils.GenerateId()
 	_, err := p.db.NamedExec(utils.MENU_INSERT, newMenu)
 	if err != nil {
 		return model.Menu{}, err

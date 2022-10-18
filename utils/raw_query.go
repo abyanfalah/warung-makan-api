@@ -6,7 +6,7 @@ const (
 	MENU_GET_BY_ID         = MENU_GET_ALL + " WHERE id = $1"
 	MENU_GET_BY_NAME       = MENU_GET_ALL + " WHERE name like $1"
 
-	MENU_INSERT       = "INSERT INTO menu(id, name, price, stock) VALUES (:id, :name, :price, :stock)"
+	MENU_INSERT       = "INSERT INTO menu(id, name, price, stock, image) VALUES (:id, :name, :price, :stock, :image)"
 	MENU_UPDATE       = "UPDATE menu SET name=:name, price=:price, stock=:stock where id=:id"
 	MENU_UPDATE_STOCK = "UPDATE menu SET stock=stock-:qty where id=:menu_id"
 	MENU_DELETE       = "DELETE from menu WHERE id=$1"

@@ -59,7 +59,7 @@ func (c *MenuController) CreateNewMenu(ctx *gin.Context) {
 		return
 	}
 
-	menu.Image.String = imagePath
+	menu.Image = menu.Id + ".jpg"
 	newMenu, err := c.ucMan.MenuUsecase().Insert(&menu)
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "insert failed")
