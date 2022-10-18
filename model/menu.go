@@ -1,8 +1,10 @@
 package model
 
 type Menu struct {
-	Id    string `json:"id" db:"id"`
-	Name  string `json:"name" db:"name" binding:"required"`
-	Price int    `json:"price" db:"price" binding:"required"`
-	Stock int    `json:"stock" db:"stock" binding:"required"`
+	Id    string `json:"id" form:"id" db:"id"`
+	Name  string `json:"name" form:"name" db:"name" binding:"required"`
+	Price int    `json:"price" form:"price" db:"price" binding:"required"`
+	Stock int    `json:"stock" form:"stock" db:"stock" binding:"required"`
+	// Image sql.NullString `json:"image" form:"image" db:"image"`
+	Image string `json:"image" form:"image" db:"image"`
 }

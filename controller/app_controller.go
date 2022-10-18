@@ -90,6 +90,31 @@ func NewController(usecaseManager manager.UsecaseManager, router *gin.Engine) *C
 		})
 	})
 
+	// ======= FILE UPLOAD
+	router.GET("/file_upload", func(ctx *gin.Context) {
+		ctx.File("index.html")
+	})
+	router.POST("/file_upload_handler", func(ctx *gin.Context) {
+		file, err := ctx.FormFile("myfile")
+		if err != nil {
+			ctx.String(http.StatusBadRequest, err.Error())
+			return
+		}
+
+		filePath := "./images/" + file.Filename
+
+		err = ctx.SaveUploadedFile(file, filePath)
+		if err != nil {
+			ctx.String(http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"file":    file.Filename,
+			"message": "file uploaded",
+		})
+	})
+
 	protectedRoute := router.Group("/test/protected", tokenMdw.RequireToken())
 	protectedRoute.GET("/secret_place", func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "welcome to the secret place. your token is verified! You can now access all protected endpoints!")

@@ -1,8 +1,8 @@
 package utils
 
 const (
-	MENU_GET_ALL           = "SELECT id, name, price, stock FROM menu"
-	MENU_GET_ALL_PAGINATED = "SELECT id, name, price, stock FROM menu limit $1 offset $2"
+	MENU_GET_ALL           = "SELECT id, name, price, stock, image FROM menu"
+	MENU_GET_ALL_PAGINATED = MENU_GET_ALL + " limit $1 offset $2"
 	MENU_GET_BY_ID         = MENU_GET_ALL + " WHERE id = $1"
 	MENU_GET_BY_NAME       = MENU_GET_ALL + " WHERE name like $1"
 
@@ -12,8 +12,8 @@ const (
 	MENU_DELETE       = "DELETE from menu WHERE id=$1"
 	// ===========================================================
 
-	USER_GET_ALL            = "SELECT id, name, username  FROM users"
-	USER_GET_ALL_PAGINATED  = "SELECT id, name, username  FROM users limit $1 offset $2"
+	USER_GET_ALL            = "SELECT id, name, username, image  FROM users"
+	USER_GET_ALL_PAGINATED  = USER_GET_ALL + " limit $1 offset $2"
 	USER_GET_BY_ID          = USER_GET_ALL + " WHERE id = $1"
 	USER_GET_BY_NAME        = USER_GET_ALL + " WHERE name like $1"
 	USER_GET_BY_CREDENTIALS = USER_GET_ALL + " WHERE username=$1 AND password=$2"

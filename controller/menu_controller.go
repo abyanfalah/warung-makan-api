@@ -36,14 +36,35 @@ func (c *MenuController) GetById(ctx *gin.Context) {
 
 func (c *MenuController) CreateNewMenu(ctx *gin.Context) {
 	var menu model.Menu
+	c.router.MaxMultipartMemory = 8 << 20
 
-	err := ctx.ShouldBindJSON(&menu)
+	err := ctx.ShouldBind(&menu)
 	if err != nil {
-		utils.JsonErrorBadRequest(ctx, err, "cant bind struct")
+		// utils.JsonErrorBadRequest(ctx, err, "cant bind struct")
+		utils.JsonDataMessageResponse(ctx, menu, "cant bind struct: "+err.Error())
 		return
 	}
 
+	imageFile, err := ctx.FormFile("image_file")
+	if err != nil {
+		utils.JsonErrorBadRequest(ctx, err, "cant get image")
+	}
+
+	// utils.JsonDataResponse(ctx, gin.H{
+	// 	"menu":  menu,
+	// 	"image": imageFile,
+	// })
+	// return
+
 	menu.Id = utils.GenerateId()
+	imagePath := "./images/menu/" + menu.Id + ".jpg"
+	err = ctx.SaveUploadedFile(imageFile, imagePath)
+	if err != nil {
+		utils.JsonErrorBadGateway(ctx, err, "cannot save image")
+		return
+	}
+
+	menu.Image = imagePath
 	newMenu, err := c.ucMan.MenuUsecase().Insert(&menu)
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "insert failed")
