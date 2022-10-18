@@ -101,6 +101,11 @@ func NewController(usecaseManager manager.UsecaseManager, router *gin.Engine) *C
 			return
 		}
 
+		if !utils.IsImage(file) {
+			ctx.String(http.StatusBadRequest, "file uploaded is not an image!")
+			return
+		}
+
 		filePath := "./images/" + file.Filename
 
 		err = ctx.SaveUploadedFile(file, filePath)
@@ -121,11 +126,14 @@ func NewController(usecaseManager manager.UsecaseManager, router *gin.Engine) *C
 		if q == "" {
 			ctx.File("./images/vueko.jpg")
 			return
-		} else if q == "nyan" {
-			ctx.File("./images/nyan.gif")
 		}
+		// else if q == "nyan" {
+		// 	ctx.File("./images/nyan.gif")
+		// } else if q == "ninja" {
+		// 	ctx.File("./images/ninja.gif")
+		// }
 
-		ctx.File("./images/" + q + ".jpg")
+		ctx.File("./images/" + q)
 	})
 
 	protectedRoute := router.Group("/test/protected", tokenMdw.RequireToken())

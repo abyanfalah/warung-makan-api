@@ -20,6 +20,16 @@ type UserController struct {
 }
 
 func (c *UserController) ListUser(ctx *gin.Context) {
+	if name := ctx.Query("name"); name != "" {
+		user, err := c.ucMan.UserUsecase().GetByName(ctx.Query("name"))
+
+		if err != nil {
+			utils.JsonErrorBadRequest(ctx, err, "cannot get user")
+		}
+
+		utils.JsonDataResponse(ctx, user)
+	}
+
 	list, err := c.ucMan.UserUsecase().GetAll()
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "cannot get user list")

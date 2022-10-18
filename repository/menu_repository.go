@@ -15,7 +15,7 @@ type MenuRepository interface {
 	GetAllPaginated(page int, rows int) ([]model.Menu, error)
 	GetAll() ([]model.Menu, error)
 	GetById(id string) (model.Menu, error)
-	// GetByName(name string) ([]model.Menu, error)
+	GetByName(name string) ([]model.Menu, error)
 
 	Insert(menu *model.Menu) (model.Menu, error)
 	Update(menu *model.Menu) (model.Menu, error)
@@ -51,6 +51,16 @@ func (p *menuRepository) GetById(id string) (model.Menu, error) {
 		return model.Menu{}, err
 	}
 	return menu, nil
+}
+
+func (p *menuRepository) GetByName(name string) ([]model.Menu, error) {
+	var menus []model.Menu
+	err := p.db.Select(&menus, utils.MENU_GET_BY_NAME+" order by id", "%"+name+"%")
+	if err != nil {
+		return nil, err
+	}
+
+	return menus, nil
 }
 
 func (p *menuRepository) Insert(newMenu *model.Menu) (model.Menu, error) {

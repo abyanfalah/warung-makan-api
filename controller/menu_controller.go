@@ -36,6 +36,14 @@ func (c *MenuController) GetById(ctx *gin.Context) {
 	utils.JsonDataResponse(ctx, menu)
 }
 
+func (c *MenuController) GetByName(ctx *gin.Context) {
+	menu, err := c.ucMan.MenuUsecase().GetByName(ctx.Query("name"))
+	if err != nil {
+		utils.JsonErrorBadRequest(ctx, err, "cannot get menu")
+	}
+	utils.JsonDataResponse(ctx, menu)
+}
+
 func (c *MenuController) CreateNewMenu(ctx *gin.Context) {
 	var menu model.Menu
 	c.router.MaxMultipartMemory = 8 << 20

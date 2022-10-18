@@ -13,7 +13,7 @@ type MenuUsecase interface {
 	GetAll() ([]model.Menu, error)
 	GetAllPaginated(page int, rows int) ([]model.Menu, error)
 	GetById(id string) (model.Menu, error)
-	// GetByName(name string) ([]model.Menu, error)
+	GetByName(name string) ([]model.Menu, error)
 	Insert(menu *model.Menu) (model.Menu, error)
 	Update(menu *model.Menu) (model.Menu, error)
 	Delete(id string) error
@@ -30,6 +30,10 @@ func (p *menuUsecase) GetAllPaginated(page int, rows int) ([]model.Menu, error) 
 
 func (p *menuUsecase) GetById(id string) (model.Menu, error) {
 	return p.menuRepository.GetById(id)
+}
+
+func (p *menuUsecase) GetByName(name string) ([]model.Menu, error) {
+	return p.menuRepository.GetByName(name)
 }
 
 func (p *menuUsecase) Insert(newMenu *model.Menu) (model.Menu, error) {
