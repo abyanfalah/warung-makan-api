@@ -1,0 +1,1050 @@
+_type: export
+__export_format: 4
+__export_date: 2022-10-19T07:55:19.671Z
+__export_source: insomnia.desktop.app:v2022.5.1
+resources:
+  - _id: req_f5a8bad468c641b99f15a90ec389bd0e
+    parentId: wrk_4ac12fd0dc01418182ce741628f987c6
+    modified: 1666165249279
+    created: 1665892843858
+    url: "{{ _.base_url }}/"
+    name: /
+    description: |-
+      Test your connection to the server with this endpoint.
+      A <code>hello world</code> should appears as string response.
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1666017902890
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: wrk_4ac12fd0dc01418182ce741628f987c6
+    parentId: null
+    modified: 1665886229355
+    created: 1665886229355
+    name: Api doc
+    description: ""
+    scope: design
+    _type: workspace
+  - _id: req_fec2e694543845209ded4fe3372b7675
+    parentId: wrk_4ac12fd0dc01418182ce741628f987c6
+    modified: 1666166045420
+    created: 1666029805312
+    url: "{{ _.base_url }}/login"
+    name: /login
+    description: >-
+      This endpoint is where you submit a credential of a valid user, then a
+      token will be generated based on submitted credential. 
+
+
+      The token is the key to access any endpoints that requires token to be accessed.
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"username": "vueko",
+        	"password": "vueko123"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_ae568a43f0594cf6b7868fab78b1d1d1
+    authentication: {}
+    metaSortKey: -1666017902865
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_cbfdf88a76a34d1c99982f99efb7322e
+    parentId: fld_33e69018dd034ae7948333e89eac3c24
+    modified: 1666165383868
+    created: 1666108463057
+    url: "{{ _.base_url }}/test/get_image?q=nyan.gif"
+    name: /test/get_image?q={file_name}
+    description: >-
+      You can edit the value of <code>q</code> query at the url to specify file
+      name you want to get from the <code>/images</code> folder.
+
+
+      <code>q</code> should also specify the extension of the image.
+
+      The url should looks like this: <code>/get_image?q=image.jpg</code>
+
+
+      This endpoint is just for the sake of testing my understanding.
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1666073397768.5
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_33e69018dd034ae7948333e89eac3c24
+    parentId: wrk_4ac12fd0dc01418182ce741628f987c6
+    modified: 1666067594191
+    created: 1666017902839
+    name: test
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1666017902840
+    _type: request_group
+  - _id: req_32ffe8a2057c4ca98585d70b934f4ba3
+    parentId: fld_33e69018dd034ae7948333e89eac3c24
+    modified: 1666165423978
+    created: 1666163468636
+    url: "{{ _.base_url }}/test/get_image?q=vueko.jpg"
+    name: /test/get_image?q={file_name}
+    description: >-
+      You can edit the value of <code>q</code> query at the url to specify file
+      name you want to get from the <code>/images</code> folder.
+
+
+      <code>q</code> should also specify the extension of the image.
+
+      The url should looks like this: <code>/get_image?q=image.jpg</code>
+
+
+      This endpoint is just for the sake of testing my understanding.
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1666070498644.75
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_b985051fc0204150bcebfe824eda0373
+    parentId: fld_33e69018dd034ae7948333e89eac3c24
+    modified: 1666165396671
+    created: 1666067599521
+    url: "{{ _.base_url }}/test/file_upload_handler"
+    name: /test/file_upload_handler
+    description: >-
+      This endpoint lets you upload and image through a multipart form. The file
+      uploaded should be a type of an image (e.g. png, jpg, jpeg, etc.)
+
+
+      This endpoint is just for the sake of testing my understanding.
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - id: pair_eb6947be78164b74ab59a626989ab550
+          name: myfile
+          value: ""
+          description: image to be uploaded
+          type: file
+          fileName: /home/abyan/Pictures/weebsht/87318865_p0.png
+          disabled: false
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: multipart/form-data
+        id: pair_471d08df1b7c4c35bc5a1ef5ab586844
+    authentication: {}
+    metaSortKey: -1666067599521
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_06ed3000678f4e2daab71dbeb6b67a4f
+    parentId: fld_33e69018dd034ae7948333e89eac3c24
+    modified: 1666165467562
+    created: 1666017904931
+    url: "{{ _.base_url }}/test/generate_token"
+    name: /test/generate_token
+    description: >-
+      This endpoint is just for the sake of testing my understanding. It needs a
+      random fake credentials then generates a jwt token from the submitted
+      credentials.
+
+      It does not check the validity of the credentials.
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"id": "194eec94-f691-4d98-ae9b-c4e659e77257",
+        	"name": "user tak dikenal",
+        	"username": "anon",
+        	"password": "anon"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_afa467e3e38540a19e20f9b6d5411118
+    authentication: {}
+    metaSortKey: -1666020547208
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_a6d7613111a04505b224dbdb27badab0
+    parentId: fld_33e69018dd034ae7948333e89eac3c24
+    modified: 1666165475761
+    created: 1666020547158
+    url: "{{ _.base_url }}/test/require_token"
+    name: /test/require_token
+    description: >-
+      This endpoint requires you to set a header <code>Authorization</code>, or
+      a <code>Bearer</code> token authentication with a token that generated
+      when you log in.
+
+
+      This is just for the sake of testing my understanding towards authorization middleware
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - id: pair_e27ee413944e4af9a61b69ced7d80ba4
+        name: Authorization
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjYwMzEyNjMsImlhdCI6MTY2NjAyNzY2MywiaXNzIjoid2FydW5nX21ha2FuX2VuaWdtYSIsInVzZXJfaWQiOiIxOTRlZWM5NC1mNjkxLTRkOTgtYWU5Yi1jNGU2NTllNzcyNTciLCJ1c2VybmFtZSI6ImFub24ifQ.SmcIgPO3RRbeTWOMcqwiVLiZAP1Fcc0s1haUxHhIsaU
+        description: ""
+        disabled: true
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjYwMzEyNjMsImlhdCI6MTY2NjAyNzY2MywiaXNzIjoid2FydW5nX21ha2FuX2VuaWdtYSIsInVzZXJfaWQiOiIxOTRlZWM5NC1mNjkxLTRkOTgtYWU5Yi1jNGU2NTllNzcyNTciLCJ1c2VybmFtZSI6ImFub24ifQ.SmcIgPO3RRbeTWOMcqwiVLiZAP1Fcc0s1haUxHhIsaU
+      disabled: false
+    metaSortKey: -1666020547158
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_f39178581b014b3c9d07e680ad767665
+    parentId: fld_33e69018dd034ae7948333e89eac3c24
+    modified: 1666165486748
+    created: 1666022784652
+    url: "{{ _.base_url }}/test/verify_token"
+    name: /test/verify_token
+    description: >-
+      this endpoint requires you to set a header <code>Authorization</code> , or
+      a <code>Bearer</code> token authentication with a token that generated
+      when you log in. It will tell you if the token is valid, expired, or
+      basically invalid.
+
+
+      This is just for the sake of testing my understanding towards authorization middleware
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - id: pair_89b582095ba44041a2794648b35c57b5
+        name: Authorization
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjYwMjk2ODUsImlhdCI6MTY2NjAyNjA4NSwiaXNzIjoid2FydW5nX21ha2FuX2VuaWdtYSIsInVzZXJfaWQiOiIxOTRlZWM5NC1mNjkxLTRkOTgtYWU5Yi1jNGU2NTllNzcyNTciLCJ1c2VybmFtZSI6ImFub24ifQ.taN7stTiK5Wc96WhAZj-kpD3nTMzZWHSCV0jF9F4tQ4
+        description: ""
+        disabled: true
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjYwMzA2OTYsImlhdCI6MTY2NjAyNzA5NiwiaXNzIjoid2FydW5nX21ha2FuX2VuaWdtYSIsInVzZXJfaWQiOiIxOTRlZWM5NC1mNjkxLTRkOTgtYWU5Yi1jNGU2NTllNzcyNTciLCJ1c2VybmFtZSI6ImFub24ifQ.w8zmW35ZVPfq2gjcaKfBhd32ROUmYBqfJss9lJI98qk
+      prefix: ""
+    metaSortKey: -1666019226045
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_b8e17fde0d02449db9109e4f92f5dfd5
+    parentId: fld_021ba8b3e40142908e3449e64051fcba
+    modified: 1666165511479
+    created: 1666025178015
+    url: "{{ _.base_url }}/test/protected/secret_place"
+    name: /test/protected/secret_place
+    description: >-
+      This endpoint is protected with auth token middleware. You are required to
+      fill the "Authorization" header with token you acquired when you log in.
+      The middleware will then verify your token. You can enter the "secret
+      place" if the token is valid.
+
+
+      This is just for the sake of testing my understanding towards authorization middleware
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - id: pair_86d5137ba171411e8f410501600cfa69
+        name: Authorization
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjYwMjk2ODUsImlhdCI6MTY2NjAyNjA4NSwiaXNzIjoid2FydW5nX21ha2FuX2VuaWdtYSIsInVzZXJfaWQiOiIxOTRlZWM5NC1mNjkxLTRkOTgtYWU5Yi1jNGU2NTllNzcyNTciLCJ1c2VybmFtZSI6ImFub24ifQ.taN7stTiK5Wc96WhAZj-kpD3nTMzZWHSCV0jF9F4tQ4
+        description: ""
+        disabled: false
+    authentication: {}
+    metaSortKey: -1666025178015
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_021ba8b3e40142908e3449e64051fcba
+    parentId: fld_33e69018dd034ae7948333e89eac3c24
+    modified: 1666025171930
+    created: 1666025166140
+    name: protected endpoints
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1666019225995
+    _type: request_group
+  - _id: req_6c2d64eb5cc147dea1e3b4e3d6c65079
+    parentId: fld_07908ebb5dae40868c3eb39616983aab
+    modified: 1666165260702
+    created: 1665898591225
+    url: "{{ _.base_url }}/menu"
+    name: /menu
+    description: >-
+      This endpoint will give a list of information of all registered menu
+      stored in the database.
+
+
+      This endpoint does not require token. Hence you don't need to login to access it.
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjYwMzI0NjMsImlhdCI6MTY2NjAyODg2MywiaXNzIjoid2FydW5nX21ha2FuX2VuaWdtYSIsInVzZXJfaWQiOiIxOTRlZWM5NC1mNjkxLTRkOTgtYWU5Yi1jNGU2NTllNzcyNTciLCJ1c2VybmFtZSI6ImFub24ifQ.IDI-1pcNiz8yF-lS-ZqlE6fXDbbm4QokZJJJp4Or4Q0
+      disabled: false
+    metaSortKey: -1665886259885
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_07908ebb5dae40868c3eb39616983aab
+    parentId: wrk_4ac12fd0dc01418182ce741628f987c6
+    modified: 1665898591220
+    created: 1665898591220
+    name: Menu
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1665795469991
+    _type: request_group
+  - _id: req_dd9dc022ea2b4208a5d5163a2b914dd4
+    parentId: fld_07908ebb5dae40868c3eb39616983aab
+    modified: 1666165268201
+    created: 1665898591228
+    url: "{{ _.base_url }}/menu/8503e898-ab0a-4691-80af-4eb04f7065dd"
+    name: /menu/{id}
+    description: >-
+      This endpoint will give a specific information of a menu stored in the
+      database.
+
+      Add the id of the menu after <code>/menu</code> to specify menu you want to find. So that the url looks like this: <code>/menu/random-id-of-menu-example</code>
+
+
+      This endpoint does not require token. Hence you don't need to login to access it.
+    method: GET
+    body:
+      mimeType: application/json
+      text: ""
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_9ed75e5ceb99423baac1f658db64d08a
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjYwMzI0NjMsImlhdCI6MTY2NjAyODg2MywiaXNzIjoid2FydW5nX21ha2FuX2VuaWdtYSIsInVzZXJfaWQiOiIxOTRlZWM5NC1mNjkxLTRkOTgtYWU5Yi1jNGU2NTllNzcyNTciLCJ1c2VybmFtZSI6ImFub24ifQ.IDI-1pcNiz8yF-lS-ZqlE6fXDbbm4QokZJJJp4Or4Q0
+    metaSortKey: -1665886259835
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_40e180d17a1a46359a78c3e742faca00
+    parentId: fld_07908ebb5dae40868c3eb39616983aab
+    modified: 1666165279152
+    created: 1665898591229
+    url: "{{ _.base_url }}/menu?name=topra"
+    name: /menu?name={name}
+    description: >-
+      This endpoint will give a information of a specific registered menu stored
+      in the database.
+
+      Add a query string with key <code>name</code>, then add menu's name after <code>/menu?</code> to specify menu you want to find. Make sure to add the question mark before entering query parameter name. So that the url looks like this: <code>/menu?name={randomname}</code>
+
+      You don't need to enter full name of the menu. The program will search a menu that has similar name to the query parameter.
+
+
+      This endpoint does not require token. Hence you don't need to login to access it.
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1665886246847
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_5c296c0587a9418183212c01eb15a03c
+    parentId: fld_07908ebb5dae40868c3eb39616983aab
+    modified: 1666165287811
+    created: 1666083038150
+    url: "{{ _.base_url }}/menu/8503e898-ab0a-4691-80af-4eb04f7065dd/image"
+    name: /menu/{id}/image
+    description: >
+      This endpoint allows you to download a specific registered menu's personal
+      image.
+
+      Add the menu's id after <code>/menu/</code> to specify the menu you want to download the image of, and then add <code>/image</code> at the end of it.
+
+
+      So that the url looks like this: <code>/menu/menu-id-example/image</code>
+      	
+      This endpoint does not require token. Hence you don't need to login to access it.
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1665886246822
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_61a962a86c8f4b83a5408e9494f46bd5
+    parentId: fld_07908ebb5dae40868c3eb39616983aab
+    modified: 1666165294447
+    created: 1666067565443
+    url: "{{ _.base_url }}/menu"
+    name: /menu
+    description: >
+      Here you can register a new menu.
+
+      Make sure to fill every field of the multipart form including the <code>image_file</code>.
+
+
+      The field <code>image_file</code> should be filled with an actual image file. Otherwise, you would encounter a <code>BadRequest</code> response, and your submission will be aborted.
+
+
+      This enpoint requires a valid token. So logging in is mandatory.
+
+      Put the token you acquired after logging in as a bearer token value.
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - id: pair_6fefe29770d84754bc4b15f012585bd3
+          name: name
+          value: mie ayam
+          description: ""
+        - id: pair_f1395efe7d82465b88f43023c77d4d94
+          name: price
+          value: "10000"
+          description: ""
+        - id: pair_2570ae0589c447639ed680fff83b7834
+          name: stock
+          value: "52"
+          description: ""
+        - id: pair_d726e6fc04e54df58ddf7e16101dfb65
+          name: image_file
+          value: ""
+          description: ""
+          type: file
+          fileName: /home/abyan/mie-ayam-di-jakarta-timur-01.jpg
+          disabled: false
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: multipart/form-data
+        id: pair_7c456678c1c946fb8ae8b3f6cdf1ef0c
+        disabled: false
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjYxNjcwOTEsImlhdCI6MTY2NjA4MDY5MSwiaXNzIjoid2FydW5nX21ha2FuX2VuaWdtYSIsInVzZXJfaWQiOiIxOTRlZWM5NC1mNjkxLTRkOTgtYWU5Yi1jNGU2NTllNzcyNTciLCJ1c2VybmFtZSI6ImFub24ifQ.LU-rGlDngck-w4mz8exeHzjFRj1b5cp4orYuIIwaIf8
+    metaSortKey: -1665886246772
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_2d305b08390d4f4888b1d21166b9e84b
+    parentId: fld_07908ebb5dae40868c3eb39616983aab
+    modified: 1666165301836
+    created: 1665898591233
+    url: "{{ _.base_url }}/menu/93a23afd-d231-42f9-a8af-7d3d08e32682"
+    name: /menu/{id}
+    description: >
+      Here you can update specific menu's information.
+
+      To update, put new value(s) to certain json field(s), you wish to update. Leave the field value same as the original if you don't intend to update certain menu's info.
+
+
+      Add the menu's at the of the url to specify which menu you want to be updated, so that url looks like this:
+
+      <code>/menu/specific-menu-id</code>
+
+
+
+      This enpoint requires a valid token. So logging in is mandatory.
+
+      Put the token you acquired after logging in as a bearer token value.
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        		"name" : "Sop Ayam",
+        	"price" : 15000,
+        	"stock" : 100
+
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_7f28adf9c9824f46941725449a430ab2
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjYwMzI0NjMsImlhdCI6MTY2NjAyODg2MywiaXNzIjoid2FydW5nX21ha2FuX2VuaWdtYSIsInVzZXJfaWQiOiIxOTRlZWM5NC1mNjkxLTRkOTgtYWU5Yi1jNGU2NTllNzcyNTciLCJ1c2VybmFtZSI6ImFub24ifQ.IDI-1pcNiz8yF-lS-ZqlE6fXDbbm4QokZJJJp4Or4Q0
+    metaSortKey: -1665886246747
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_88d1d57ad0f54dd3a9d2f598e356368a
+    parentId: fld_07908ebb5dae40868c3eb39616983aab
+    modified: 1666165308597
+    created: 1665898591235
+    url: "{{ _.base_url }}/menu/bd83adc3-ca4a-4c33-9a0f-448cd5fdd16c"
+    name: /menu/{id}
+    description: >
+      This endpoint is where you delete specified menu from the database.
+
+
+      Add the menu's at the of the url to specify which menu you want to be updated, so that url looks like this:
+
+      <code>/menu/specific-menu-id</code>
+
+
+      This enpoint requires a valid token. So logging in is mandatory.
+
+      Put the token you acquired after logging in as a bearer token value.
+    method: DELETE
+    body: {}
+    parameters: []
+    headers: []
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjYxNjkwNTEsImlhdCI6MTY2NjA4MjY1MSwiaXNzIjoid2FydW5nX21ha2FuX2VuaWdtYSIsInVzZXJfaWQiOiI4ZGVkMjUyYS1mNTEwLTRhNjctYjcxMS03M2EzMWNjMjA4YmUiLCJ1c2VybmFtZSI6InZ1ZWtvIn0.j6Qng3V0xXIAvtzMpX8SumaLPfj64IxRurzeL4KApaE
+    metaSortKey: -1665886246697
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_8167e47166744579bfba076d534bdcf5
+    parentId: fld_d7cc7acdecbb4d1099e197022ea63255
+    modified: 1666165314199
+    created: 1665886246897
+    url: "{{ _.base_url }}/user"
+    name: /user
+    description: >-
+      This endpoint will give a list of information of all registered user
+      stored in the database.
+
+
+      This endpoint does not require token. Hence you don't need to login to access it.
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication:
+      type: basic
+      useISO88591: false
+      disabled: false
+      username: ""
+      password: ""
+    metaSortKey: -1665886259885
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_d7cc7acdecbb4d1099e197022ea63255
+    parentId: wrk_4ac12fd0dc01418182ce741628f987c6
+    modified: 1666028872980
+    created: 1665886244969
+    name: User
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1665795469966
+    _type: request_group
+  - _id: req_c862799a3f9a4ea4b611ef09af4f8956
+    parentId: fld_d7cc7acdecbb4d1099e197022ea63255
+    modified: 1666165320312
+    created: 1665886259835
+    url: "{{ _.base_url }}/user/8ded252a-f510-4a67-b711-73a31cc208be"
+    name: /user/{id}
+    description: >-
+      This endpoint will give a specific information of registered user stored
+      in the database.
+
+      Add the id of the user after <code>/user</code> to specify user you want to find. So that the url looks like this: <code>/user/random-id-of-user-q2352-cawf-example</code>
+
+
+      This endpoint does not require token. Hence you don't need to login to access it.
+    method: GET
+    body:
+      mimeType: application/json
+      text: ""
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_9ed75e5ceb99423baac1f658db64d08a
+    authentication: {}
+    metaSortKey: -1665886259835
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_3db606fb6a7f48dc93383d3f97ef8962
+    parentId: fld_d7cc7acdecbb4d1099e197022ea63255
+    modified: 1666165328489
+    created: 1665886310634
+    url: "{{ _.base_url }}/user?name=vuero"
+    name: /user?name={name}
+    description: >-
+      This endpoint will give a information of a specific registered user stored
+      in the database.
+
+      Add a query string with key <code>name</code>, then add user's name after <code>/user?</code> to specify user you want to find. Make sure to add the question mark before entering query parameter name. So that the url looks like this: <code>/user?name={randomname}</code>
+
+      You don't need to enter full name of the user. The program will search a user that has similar name to the query parameter.
+
+
+      This endpoint does not require token. Hence you don't need to login to access it.
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1665886246847
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_cfb5f067066e4e27932e2c0cb0c13635
+    parentId: fld_d7cc7acdecbb4d1099e197022ea63255
+    modified: 1666165337783
+    created: 1666083396299
+    url: "{{ _.base_url }}/user/8ded252a-f510-4a67-b711-73a31cc208be/image"
+    name: /user/{id}/image
+    description: >
+      This endpoint allows you to download a specific registered user's personal
+      image.
+
+      Add the user's id after <code>/user/</code> to specify the user you want to download the image of, and then add <code>/image</code> at the end of it.
+
+
+      So that the url looks like this: <code>/user/user-id-example/image</code>
+      	
+      This endpoint does not require token. Hence you don't need to login to access it.
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1665886246822
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_fc33692513b44c99b27b1eefe70c3d08
+    parentId: fld_d7cc7acdecbb4d1099e197022ea63255
+    modified: 1666165342663
+    created: 1666078380093
+    url: "{{ _.base_url }}/user"
+    name: /user
+    description: >
+      Here you can register a new user.
+
+      Make sure to fill every field of the multipart form including the <code>image_file</code>.
+
+
+      The field <code>image_file</code> should be filled with an actual image file. Otherwise, you would encounter a <code>BadRequest</code> response, and your submission will be aborted.
+
+
+      This enpoint requires a valid token. So logging in is mandatory.
+
+      Put the token you acquired after logging in as a bearer token value.
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - name: name
+          value: admin
+          id: pair_4dc2251096fe49c1930583295eb644d2
+        - id: pair_ab55697fdf9346a2adf062209ebd7dac
+          name: username
+          value: admin
+          description: ""
+        - id: pair_93cb3e82a1094990ac20df1d5305f745
+          name: password
+          value: admin123
+          description: ""
+        - id: pair_53e095ab4038468b9815409edde97b42
+          name: image_file
+          value: ""
+          description: ""
+          type: file
+          fileName: /home/abyan/Pictures/1251337.jpg
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: multipart/form-data
+        id: pair_7c456678c1c946fb8ae8b3f6cdf1ef0c
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjYxNjcwOTEsImlhdCI6MTY2NjA4MDY5MSwiaXNzIjoid2FydW5nX21ha2FuX2VuaWdtYSIsInVzZXJfaWQiOiIxOTRlZWM5NC1mNjkxLTRkOTgtYWU5Yi1jNGU2NTllNzcyNTciLCJ1c2VybmFtZSI6ImFub24ifQ.LU-rGlDngck-w4mz8exeHzjFRj1b5cp4orYuIIwaIf8
+    metaSortKey: -1665886246784.5
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_adc1b53e1f50496b880a2d2c1bf1d0c9
+    parentId: fld_d7cc7acdecbb4d1099e197022ea63255
+    modified: 1666165348155
+    created: 1665886359719
+    url: "{{ _.base_url }}/user/6ff391c0-3e9b-4d28-af75-44d5b67bec88"
+    name: /user/{id}
+    description: >
+      Here you can update specific user's information.
+
+      To update, put new value(s) to certain json field(s), you wish to update. Leave the field value same as the original if you don't intend to update certain user's info.
+
+
+      Add the user's at the of the url to specify which user you want to be updated, so that url looks like this:
+
+      <code>/user/specific-user-id</code>
+
+
+
+      This enpoint requires a valid token. So logging in is mandatory.
+
+      Put the token you acquired after logging in as a bearer token value.
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        		"name": "Authorized person",
+        		"username": "made by authorized person",
+        		"password" : "password"
+
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_7f28adf9c9824f46941725449a430ab2
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjYxNjcwOTEsImlhdCI6MTY2NjA4MDY5MSwiaXNzIjoid2FydW5nX21ha2FuX2VuaWdtYSIsInVzZXJfaWQiOiIxOTRlZWM5NC1mNjkxLTRkOTgtYWU5Yi1jNGU2NTllNzcyNTciLCJ1c2VybmFtZSI6ImFub24ifQ.LU-rGlDngck-w4mz8exeHzjFRj1b5cp4orYuIIwaIf8
+    metaSortKey: -1665886246747
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_6fc80ea944c2488886d2d429dfbc1695
+    parentId: fld_d7cc7acdecbb4d1099e197022ea63255
+    modified: 1666165355135
+    created: 1665886417114
+    url: "{{ _.base_url }}/user/f2dec07e-6460-4b23-b424-416abc8d9eb8"
+    name: /user/{id}
+    description: >
+      This endpoint is where you delete specified user from the database.
+
+
+      Add the user's at the of the url to specify which user you want to be updated, so that url looks like this:
+
+      <code>/user/specific-user-id</code>
+
+
+      This enpoint requires a valid token. So logging in is mandatory.
+
+      Put the token you acquired after logging in as a bearer token value.
+    method: DELETE
+    body: {}
+    parameters: []
+    headers: []
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjYxNjkwNTEsImlhdCI6MTY2NjA4MjY1MSwiaXNzIjoid2FydW5nX21ha2FuX2VuaWdtYSIsInVzZXJfaWQiOiI4ZGVkMjUyYS1mNTEwLTRhNjctYjcxMS03M2EzMWNjMjA4YmUiLCJ1c2VybmFtZSI6InZ1ZWtvIn0.j6Qng3V0xXIAvtzMpX8SumaLPfj64IxRurzeL4KApaE
+    metaSortKey: -1665886246697
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_b5d3c30674ed41098185e66af0c7141b
+    parentId: fld_e4106caed46144cf91fb0dffe0af8e2c
+    modified: 1666166051823
+    created: 1665901237376
+    url: "{{ _.base_url }}/transaction"
+    name: /transaction
+    description: >-
+      This endpoint will give a list of information of all stored transactions
+      in the database.
+
+
+      This enpoint requires a valid token. So logging in is mandatory.
+
+      Put the token you acquired after logging in as a bearer token value.
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjYyNDAyMzQsImlhdCI6MTY2NjE1MzgzNCwiaXNzIjoid2FydW5nX21ha2FuX2VuaWdtYSIsInVzZXJfaWQiOiI0NDkzNjBjOC05MTRkLTRjMDMtOGMyYS1kNTExZGNmZDRiODIiLCJ1c2VybmFtZSI6ImFkbWluIn0.7Zf7mie6KFtmoP8IHDa0ESiT6eSmdXCZo0HcqZAnIXE
+    metaSortKey: -1665886259885
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_e4106caed46144cf91fb0dffe0af8e2c
+    parentId: wrk_4ac12fd0dc01418182ce741628f987c6
+    modified: 1665901241195
+    created: 1665901237357
+    name: Transaction
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1665795469941
+    _type: request_group
+  - _id: req_f69f23f5555648b9873d5abc4d505132
+    parentId: fld_e4106caed46144cf91fb0dffe0af8e2c
+    modified: 1666166058399
+    created: 1665901237394
+    url: "{{ _.base_url }}/transaction/82af03c9-309b-4d37-91c8-85ac9f3071d7"
+    name: /transaction/{id}
+    description: >-
+      This endpoint will give a specific information of a transaction stored in
+      the database.
+
+      Add the id of the transaction after <code>/transaction</code> to specify transaction you want to find. So that the url looks like this: <code>/transaction/random-id-of-transaction-example</code>
+
+
+      This enpoint requires a valid token. So logging in is mandatory.
+
+      Put the token you acquired after logging in as a bearer token value.
+    method: GET
+    body:
+      mimeType: application/json
+      text: ""
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_9ed75e5ceb99423baac1f658db64d08a
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjYyNDAyMzQsImlhdCI6MTY2NjE1MzgzNCwiaXNzIjoid2FydW5nX21ha2FuX2VuaWdtYSIsInVzZXJfaWQiOiI0NDkzNjBjOC05MTRkLTRjMDMtOGMyYS1kNTExZGNmZDRiODIiLCJ1c2VybmFtZSI6ImFkbWluIn0.7Zf7mie6KFtmoP8IHDa0ESiT6eSmdXCZo0HcqZAnIXE
+    metaSortKey: -1665886259835
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_7ed87c95cd3b4ec78a220f925e9cfddc
+    parentId: fld_e4106caed46144cf91fb0dffe0af8e2c
+    modified: 1666166062951
+    created: 1665901237405
+    url: "{{ _.base_url }}/transaction"
+    name: /transaction
+    description: >-
+      To create a new transaction, send a detail of the transaction which
+      consists of <code>menu_id</code> and <code>qty</code>. In other word, you
+      should just tell what menu you want to buy and how many.
+
+
+      If the transaction is created. You will see the <code>subtotal</code> field, which acquired by multiplying the price of the menu you entered before by quantity or <code>qty</code>.
+
+      Then finally, you will get the <code>total</code> field which is the sum of all <code>subtotal</code>.
+
+
+      This endpoint requires a valid token. So logging in is mandatory.
+
+      Put the token you acquired after logging in as a bearer token value.
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"items" : [
+        		{
+        			"menu_id" : "8503e898-ab0a-4691-80af-4eb04f7065dd",
+        			"qty" : 1
+        		},
+        		{
+        			"menu_id" : "aceabd1a-beab-4884-bb7c-3665271a3b10",
+        			"qty" : 2
+        		}
+        	]
+        	
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_7c456678c1c946fb8ae8b3f6cdf1ef0c
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjYyNDAyMzQsImlhdCI6MTY2NjE1MzgzNCwiaXNzIjoid2FydW5nX21ha2FuX2VuaWdtYSIsInVzZXJfaWQiOiI0NDkzNjBjOC05MTRkLTRjMDMtOGMyYS1kNTExZGNmZDRiODIiLCJ1c2VybmFtZSI6ImFkbWluIn0.7Zf7mie6KFtmoP8IHDa0ESiT6eSmdXCZo0HcqZAnIXE
+    metaSortKey: -1665886246797
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: env_535fd0299fe45603284e5b9991147e6f7120b80d
+    parentId: wrk_4ac12fd0dc01418182ce741628f987c6
+    modified: 1666108347531
+    created: 1665886229367
+    name: Base Environment
+    data: {}
+    dataPropertyOrder: {}
+    color: null
+    isPrivate: false
+    metaSortKey: 1665886229367
+    _type: environment
+  - _id: jar_535fd0299fe45603284e5b9991147e6f7120b80d
+    parentId: wrk_4ac12fd0dc01418182ce741628f987c6
+    modified: 1665886229369
+    created: 1665886229369
+    name: Default Jar
+    cookies: []
+    _type: cookie_jar
+  - _id: spc_9199507646ab44ebaad5f99dce8fc2a3
+    parentId: wrk_4ac12fd0dc01418182ce741628f987c6
+    modified: 1665886229358
+    created: 1665886229358
+    fileName: Api doc
+    contents: ""
+    contentType: yaml
+    _type: api_spec
+  - _id: env_3a74d9e145ad45dd9d9d38d15b419052
+    parentId: env_535fd0299fe45603284e5b9991147e6f7120b80d
+    modified: 1666111221425
+    created: 1666108353924
+    name: Development
+    data:
+      base_url: localhost:8000
+    dataPropertyOrder:
+      "&":
+        - base_url
+    color: null
+    isPrivate: false
+    metaSortKey: 1666108353924
+    _type: environment
