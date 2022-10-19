@@ -10,6 +10,10 @@ const (
 	MENU_UPDATE       = "UPDATE menu SET name=:name, price=:price, stock=:stock where id=:id"
 	MENU_UPDATE_STOCK = "UPDATE menu SET stock=stock-:qty where id=:menu_id"
 	MENU_DELETE       = "DELETE from menu WHERE id=$1"
+
+	MENU_INSERT_TEST       = "INSERT INTO menu(id, name, price, stock, image) VALUES ($1, $2, $3, $4, $5)"
+	MENU_UPDATE_TEST       = "UPDATE menu SET name=$1, price=$2, stock=$3 where id=$4"
+	MENU_UPDATE_STOCK_TEST = "UPDATE menu SET stock=stock-$1 where id=$2"
 	// ===========================================================
 
 	USER_GET_ALL            = "SELECT id, name, username, image  FROM users"
@@ -21,6 +25,9 @@ const (
 	USER_INSERT = "INSERT INTO users(id, name, username, password, image) VALUES (:id, :name, :username, :password, :image)"
 	USER_UPDATE = "UPDATE users SET name=:name, username=:username, password=:password where id=:id"
 	USER_DELETE = "DELETE from users WHERE id=$1"
+
+	USER_INSERT_TEST = "INSERT INTO users(id, name, username, password, image) VALUES ($1, $2, $3, $4, $5)"
+	USER_UPDATE_TEST = "UPDATE users SET name=$1, username=$2, password=$3 where id=$4"
 	// ===========================================================
 
 	TRANSACTION_GET_ALL           = "SELECT id, total_price, created_at, updated_at FROM transaction "
