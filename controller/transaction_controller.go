@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"net/http"
 	"warung-makan/config"
 	"warung-makan/manager"
 	"warung-makan/middleware"
@@ -60,6 +61,11 @@ func (c *TransactionController) CreateNewTransaction(ctx *gin.Context) {
 		transaction.Items[i].TransactionId = transaction.Id
 		transaction.Items[i].Subtotal = menu.Price * each.Qty
 		transaction.TotalPrice += transaction.Items[i].Subtotal
+	}
+
+	if len(transaction.Items) == 0 {
+		ctx.String(http.StatusBadRequest, "Transaction has 0 valid item. Transaction not created.")
+		return
 	}
 
 	newTransaction, err := c.ucMan.TransactionUsecase().Insert(&transaction)
