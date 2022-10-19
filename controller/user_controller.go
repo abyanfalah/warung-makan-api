@@ -24,15 +24,23 @@ func (c *UserController) ListUser(ctx *gin.Context) {
 		user, err := c.ucMan.UserUsecase().GetByName(ctx.Query("name"))
 
 		if err != nil {
-			utils.JsonErrorBadRequest(ctx, err, "cannot get user")
+			utils.JsonErrorBadRequest(ctx, err, "cannot get list")
+			return
+		}
+
+		if len(user) == 0 {
+			ctx.String(http.StatusBadRequest, "no user with name like "+name)
+			return
 		}
 
 		utils.JsonDataResponse(ctx, user)
+		return
 	}
 
 	list, err := c.ucMan.UserUsecase().GetAll()
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "cannot get user list")
+		return
 	}
 
 	utils.JsonDataResponse(ctx, list)
@@ -42,6 +50,7 @@ func (c *UserController) GetById(ctx *gin.Context) {
 	user, err := c.ucMan.UserUsecase().GetById(ctx.Param("id"))
 	if err != nil {
 		utils.JsonErrorBadRequest(ctx, err, "cannot get user")
+		return
 	}
 
 	utils.JsonDataResponse(ctx, user)
@@ -64,6 +73,7 @@ func (c *UserController) CreateNewUser(ctx *gin.Context) {
 	imageFile, err := ctx.FormFile("image_file")
 	if err != nil {
 		utils.JsonErrorBadRequest(ctx, err, "cant get image")
+		return
 	}
 
 	id := utils.GenerateId()
@@ -119,6 +129,7 @@ func (c *UserController) DeleteUser(ctx *gin.Context) {
 	err = c.ucMan.UserUsecase().Delete(user.Id)
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "cannot delete user")
+		return
 	}
 
 	err = os.Remove("./images/user/" + user.Id + ".jpg")

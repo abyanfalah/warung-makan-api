@@ -91,10 +91,11 @@ func NewController(usecaseManager manager.UsecaseManager, router *gin.Engine) *C
 	})
 
 	// ======= FILE UPLOAD
-	router.GET("/file_upload", func(ctx *gin.Context) {
-		ctx.File("index.html")
-	})
-	router.POST("/file_upload_handler", func(ctx *gin.Context) {
+	// test.GET("/file_upload", func(ctx *gin.Context) {
+	// 	ctx.File("index.html")
+	// })
+
+	test.POST("/file_upload_handler", func(ctx *gin.Context) {
 		file, err := ctx.FormFile("myfile")
 		if err != nil {
 			ctx.String(http.StatusBadRequest, err.Error())
@@ -121,7 +122,7 @@ func NewController(usecaseManager manager.UsecaseManager, router *gin.Engine) *C
 	})
 
 	// ==== FILE DOWNLOAD
-	router.GET("/get_image", func(ctx *gin.Context) {
+	test.GET("/get_image", func(ctx *gin.Context) {
 		q := ctx.Query("q")
 		if q == "" {
 			ctx.File("./images/vueko.jpg")

@@ -32,6 +32,18 @@ func JsonSuccessMessage(ctx *gin.Context, message string) {
 	})
 }
 
+func JsonBadRequestMessage(ctx *gin.Context, message string) {
+	ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+		"message": message,
+	})
+}
+
+func JsonBadGatewayMessage(ctx *gin.Context, message string) {
+	ctx.AbortWithStatusJSON(http.StatusBadGateway, gin.H{
+		"message": message,
+	})
+}
+
 func JsonErrorBadGateway(ctx *gin.Context, err error, message string) {
 	ctx.AbortWithStatusJSON(http.StatusBadGateway, gin.H{
 		"error":   err.Error(),

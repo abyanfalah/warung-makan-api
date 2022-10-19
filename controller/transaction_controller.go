@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"warung-makan/config"
 	"warung-makan/manager"
 	"warung-makan/middleware"
@@ -46,9 +47,14 @@ func (c *TransactionController) CreateNewTransaction(ctx *gin.Context) {
 	transaction.Id = utils.GenerateId()
 	// fill transaction details
 	for i, each := range transaction.Items {
-		menu, _ := c.ucMan.MenuUsecase().GetById(each.MenuId)
+		menu, err := c.ucMan.MenuUsecase().GetById(each.MenuId)
+		if err != nil {
+			fmt.Println("cant find the menu")
+			continue
+		}
 
 		if each.Qty > menu.Stock || menu.Stock < 1 || each.Qty < 1 {
+			fmt.Println("qty is invalid")
 			continue
 		}
 		transaction.Items[i].TransactionId = transaction.Id
@@ -65,39 +71,39 @@ func (c *TransactionController) CreateNewTransaction(ctx *gin.Context) {
 	utils.JsonDataMessageResponse(ctx, newTransaction, "transaction created")
 }
 
-func (c *TransactionController) UpdateTransaction(ctx *gin.Context) {
-	var transaction model.Transaction
+// func (c *TransactionController) UpdateTransaction(ctx *gin.Context) {
+// 	var transaction model.Transaction
 
-	err := ctx.ShouldBindJSON(&transaction)
-	if err != nil {
-		utils.JsonErrorBadRequest(ctx, err, "cant bind struct")
-		return
-	}
+// 	err := ctx.ShouldBindJSON(&transaction)
+// 	if err != nil {
+// 		utils.JsonErrorBadRequest(ctx, err, "cant bind struct")
+// 		return
+// 	}
 
-	transaction.Id = ctx.Param("id")
-	updatedTransaction, err := c.ucMan.TransactionUsecase().Update(&transaction)
-	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "update failed")
-		return
-	}
+// 	transaction.Id = ctx.Param("id")
+// 	updatedTransaction, err := c.ucMan.TransactionUsecase().Update(&transaction)
+// 	if err != nil {
+// 		utils.JsonErrorBadGateway(ctx, err, "update failed")
+// 		return
+// 	}
 
-	utils.JsonDataMessageResponse(ctx, updatedTransaction, "transaction updated")
-}
+// 	utils.JsonDataMessageResponse(ctx, updatedTransaction, "transaction updated")
+// }
 
-func (c *TransactionController) DeleteTransaction(ctx *gin.Context) {
-	transaction, err := c.ucMan.TransactionUsecase().GetById(ctx.Param("id"))
-	if err != nil {
-		utils.JsonErrorBadRequest(ctx, err, "transaction not found")
-		return
-	}
+// func (c *TransactionController) DeleteTransaction(ctx *gin.Context) {
+// 	transaction, err := c.ucMan.TransactionUsecase().GetById(ctx.Param("id"))
+// 	if err != nil {
+// 		utils.JsonErrorBadRequest(ctx, err, "transaction not found")
+// 		return
+// 	}
 
-	err = c.ucMan.TransactionUsecase().Delete(transaction.Id)
-	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "cannot delete transaction")
-	}
+// 	err = c.ucMan.TransactionUsecase().Delete(transaction.Id)
+// 	if err != nil {
+// 		utils.JsonErrorBadGateway(ctx, err, "cannot delete transaction")
+// 	}
 
-	utils.JsonSuccessMessage(ctx, "Transaction deleted")
-}
+// 	utils.JsonSuccessMessage(ctx, "Transaction deleted")
+// }
 
 func NewTransactionController(usecaseManager manager.UsecaseManager, router *gin.Engine) *TransactionController {
 	controller := TransactionController{
@@ -110,8 +116,8 @@ func NewTransactionController(usecaseManager manager.UsecaseManager, router *gin
 	protectedRoute.GET("/", controller.ListTransaction)
 	protectedRoute.GET("/:id", controller.GetById)
 	protectedRoute.POST("/", controller.CreateNewTransaction)
-	protectedRoute.PUT("/:id", controller.UpdateTransaction)
-	protectedRoute.DELETE("/:id", controller.DeleteTransaction)
+	// protectedRoute.PUT("/:id", controller.UpdateTransaction)
+	// protectedRoute.DELETE("/:id", controller.DeleteTransaction)
 
 	return &controller
 }

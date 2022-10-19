@@ -2,6 +2,7 @@ package controller
 
 import (
 	"log"
+	"net/http"
 	"os"
 	"warung-makan/config"
 	"warung-makan/manager"
@@ -19,9 +20,27 @@ type MenuController struct {
 }
 
 func (c *MenuController) ListMenu(ctx *gin.Context) {
+	if name := ctx.Query("name"); name != "" {
+		menu, err := c.ucMan.MenuUsecase().GetByName(ctx.Query("name"))
+
+		if err != nil {
+			utils.JsonErrorBadRequest(ctx, err, "cannot get list")
+			return
+		}
+
+		if len(menu) == 0 {
+			ctx.String(http.StatusBadRequest, "no menu with name like "+name)
+			return
+		}
+
+		utils.JsonDataResponse(ctx, menu)
+		return
+	}
+
 	list, err := c.ucMan.MenuUsecase().GetAll()
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "cannot get menu list")
+		return
 	}
 
 	utils.JsonDataResponse(ctx, list)
@@ -31,16 +50,9 @@ func (c *MenuController) GetById(ctx *gin.Context) {
 	menu, err := c.ucMan.MenuUsecase().GetById(ctx.Param("id"))
 	if err != nil {
 		utils.JsonErrorBadRequest(ctx, err, "cannot get menu")
+		return
 	}
 
-	utils.JsonDataResponse(ctx, menu)
-}
-
-func (c *MenuController) GetByName(ctx *gin.Context) {
-	menu, err := c.ucMan.MenuUsecase().GetByName(ctx.Query("name"))
-	if err != nil {
-		utils.JsonErrorBadRequest(ctx, err, "cannot get menu")
-	}
 	utils.JsonDataResponse(ctx, menu)
 }
 
@@ -57,6 +69,7 @@ func (c *MenuController) CreateNewMenu(ctx *gin.Context) {
 	imageFile, err := ctx.FormFile("image_file")
 	if err != nil {
 		utils.JsonErrorBadRequest(ctx, err, "cant get image")
+		return
 	}
 
 	menu.Id = utils.GenerateId()
@@ -106,6 +119,7 @@ func (c *MenuController) DeleteMenu(ctx *gin.Context) {
 	err = c.ucMan.MenuUsecase().Delete(menu.Id)
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "cannot delete menu")
+		return
 	}
 
 	err = os.Remove("./images/menu/" + menu.Id + ".jpg")
