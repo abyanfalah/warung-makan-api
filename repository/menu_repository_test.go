@@ -66,7 +66,7 @@ func (suite *MenuRepositoryTestSuite) TearDownTest() {
 	// Gak perlu teardown. Mungkin karena sql.DB gak dipake. Yang dipake hanya sqlx.DB
 }
 
-func (suite *MenuRepositoryTestSuite) TestGetAll_Success() {
+func (suite *MenuRepositoryTestSuite) TestGetAllMenu_Success() {
 	rows := sqlmock.NewRows([]string{"id", "name", "price", "stock", "image"})
 	for _, dummy := range dummyMenus {
 		rows.AddRow(dummy.Id, dummy.Name, dummy.Price, dummy.Stock, dummy.Image)
@@ -82,7 +82,7 @@ func (suite *MenuRepositoryTestSuite) TestGetAll_Success() {
 	assert.Equal(suite.T(), "dummy id 1", actual[0].Id)
 }
 
-func (suite *MenuRepositoryTestSuite) TestGetAll_Failed() {
+func (suite *MenuRepositoryTestSuite) TestGetAllMenu_Failed() {
 	rows := sqlmock.NewRows([]string{"id", "name", "price", "stock", "image"})
 
 	for _, dummy := range dummyMenus {
@@ -95,30 +95,32 @@ func (suite *MenuRepositoryTestSuite) TestGetAll_Failed() {
 	actual, err := repo.GetAll()
 
 	assert.Nil(suite.T(), actual)
+	assert.Equal(suite.T(), 0, len(actual))
 	assert.Error(suite.T(), err)
 
 }
 
-func (suite *MenuRepositoryTestSuite) TestGetById_Success() {
+func (suite *MenuRepositoryTestSuite) TestGetByIdMenu_Success() {
 	dummy := dummyMenus[0]
 	row := sqlmock.NewRows([]string{"id", "name", "price", "stock", "image"})
 	row.AddRow(dummy.Id, dummy.Name, dummy.Price, dummy.Stock, dummy.Image)
 
-	suite.mockSql.ExpectQuery(utils.MENU_GET_BY_ID).WillReturnRows(row)
+	suite.mockSql.ExpectQuery(regexp.QuoteMeta(utils.MENU_GET_BY_ID)).WillReturnRows(row)
 
 	repo := repository.NewMenuRepository(suite.mockSqlxDb)
 	actual, err := repo.GetById(dummy.Id)
 
-	assert.Error(suite.T(), err)
+	assert.Nil(suite.T(), err)
 	assert.NotNil(suite.T(), actual)
+	assert.Equal(suite.T(), dummy, actual)
 }
 
-func (suite *MenuRepositoryTestSuite) TestGetById_Failed() {
+func (suite *MenuRepositoryTestSuite) TestGetByIdMenu_Failed() {
 	dummy := dummyMenus[0]
 	row := sqlmock.NewRows([]string{"id", "name", "price", "stock", "image"})
 	row.AddRow(dummy.Id, dummy.Name, dummy.Price, dummy.Stock, dummy.Image)
 
-	suite.mockSql.ExpectQuery(utils.MENU_GET_BY_ID).WillReturnError(errors.New("failed to retrieve user"))
+	suite.mockSql.ExpectQuery(regexp.QuoteMeta(utils.MENU_GET_BY_ID)).WillReturnError(errors.New("failed to retrieve user"))
 
 	repo := repository.NewMenuRepository(suite.mockSqlxDb)
 	actual, err := repo.GetById(dummy.Id)
@@ -127,35 +129,36 @@ func (suite *MenuRepositoryTestSuite) TestGetById_Failed() {
 	assert.Equal(suite.T(), model.Menu{}, actual)
 }
 
-func (suite *MenuRepositoryTestSuite) TestGetByName_Success() {
+func (suite *MenuRepositoryTestSuite) TestGetByNameMenu_Success() {
 	dummy := dummyMenus[0]
 	row := sqlmock.NewRows([]string{"id", "name", "price", "stock", "image"})
 	row.AddRow(dummy.Id, dummy.Name, dummy.Price, dummy.Stock, dummy.Image)
 
-	suite.mockSql.ExpectQuery(utils.MENU_GET_BY_NAME).WillReturnRows(row)
+	suite.mockSql.ExpectQuery(regexp.QuoteMeta(utils.MENU_GET_BY_NAME)).WillReturnRows(row)
 
 	repo := repository.NewMenuRepository(suite.mockSqlxDb)
-	actual, err := repo.GetById(dummy.Id)
+	actual, err := repo.GetByName(dummy.Name)
 
-	assert.Error(suite.T(), err)
+	assert.Nil(suite.T(), err)
 	assert.NotNil(suite.T(), actual)
+	assert.Equal(suite.T(), 1, len(actual))
 }
 
-func (suite *MenuRepositoryTestSuite) TestGetByName_Failed() {
+func (suite *MenuRepositoryTestSuite) TestGetByNameMenu_Failed() {
 	dummy := dummyMenus[0]
 	row := sqlmock.NewRows([]string{"id", "name", "price", "stock", "image"})
 	row.AddRow(dummy.Id, dummy.Name, dummy.Price, dummy.Stock, dummy.Image)
 
-	suite.mockSql.ExpectQuery(utils.MENU_GET_BY_NAME).WillReturnError(errors.New("failed to retrieve user"))
+	suite.mockSql.ExpectQuery(regexp.QuoteMeta(utils.MENU_GET_BY_NAME)).WillReturnError(errors.New("failed to retrieve user"))
 
 	repo := repository.NewMenuRepository(suite.mockSqlxDb)
-	actual, err := repo.GetById(dummy.Id)
+	actual, err := repo.GetByName(dummy.Name)
 
 	assert.Error(suite.T(), err)
-	assert.Equal(suite.T(), model.Menu{}, actual)
+	assert.Equal(suite.T(), 0, len(actual))
 }
 
-func (suite *MenuRepositoryTestSuite) TestInsert_Success() {
+func (suite *MenuRepositoryTestSuite) TestInsertMenu_Success() {
 	var dummy = dummyMenus[0]
 
 	suite.mockSql.ExpectExec(regexp.QuoteMeta(utils.MENU_INSERT_TEST)).WithArgs(dummy.Id, dummy.Name, dummy.Price, dummy.Stock, dummy.Image).WillReturnResult(sqlmock.NewResult(1, 1))
@@ -167,7 +170,7 @@ func (suite *MenuRepositoryTestSuite) TestInsert_Success() {
 	assert.Equal(suite.T(), dummy, actual)
 }
 
-func (suite *MenuRepositoryTestSuite) TestInsert_Failed() {
+func (suite *MenuRepositoryTestSuite) TestInsertMenu_Failed() {
 	var dummy = dummyMenus[0]
 
 	suite.mockSql.ExpectExec(regexp.QuoteMeta(utils.MENU_INSERT_TEST)).WillReturnError(errors.New("insert failed"))
@@ -179,7 +182,7 @@ func (suite *MenuRepositoryTestSuite) TestInsert_Failed() {
 	assert.Equal(suite.T(), model.Menu{}, actual)
 }
 
-func (suite *MenuRepositoryTestSuite) TestUpdate_Success() {
+func (suite *MenuRepositoryTestSuite) TestUpdateMenu_Success() {
 	var dummy = dummyMenus[0]
 
 	suite.mockSql.ExpectExec(regexp.QuoteMeta(utils.MENU_UPDATE_TEST)).WithArgs(dummy.Name, dummy.Price, dummy.Stock, dummy.Id).WillReturnResult(sqlmock.NewResult(1, 1))
@@ -191,7 +194,7 @@ func (suite *MenuRepositoryTestSuite) TestUpdate_Success() {
 	assert.Equal(suite.T(), dummy, actual)
 }
 
-func (suite *MenuRepositoryTestSuite) TestUpdate_Failed() {
+func (suite *MenuRepositoryTestSuite) TestUpdateMenu_Failed() {
 	var dummy = dummyMenus[0]
 
 	suite.mockSql.ExpectExec(regexp.QuoteMeta(utils.MENU_UPDATE_TEST)).WillReturnError(errors.New("update failed"))
@@ -203,7 +206,7 @@ func (suite *MenuRepositoryTestSuite) TestUpdate_Failed() {
 	assert.Equal(suite.T(), model.Menu{}, actual)
 }
 
-func (suite *MenuRepositoryTestSuite) TestDelete_Success() {
+func (suite *MenuRepositoryTestSuite) TestDeleteMenu_Success() {
 	var dummy = dummyMenus[0]
 
 	suite.mockSql.ExpectExec(regexp.QuoteMeta(utils.MENU_DELETE)).WithArgs(dummy.Id).WillReturnResult(sqlmock.NewResult(1, 1))
@@ -214,7 +217,7 @@ func (suite *MenuRepositoryTestSuite) TestDelete_Success() {
 	assert.Nil(suite.T(), err)
 }
 
-func (suite *MenuRepositoryTestSuite) TestDelete_Failed() {
+func (suite *MenuRepositoryTestSuite) TestDeleteMenu_Failed() {
 	var dummy = dummyMenus[0]
 
 	suite.mockSql.ExpectExec(regexp.QuoteMeta(utils.MENU_DELETE)).WillReturnError(errors.New("delete failed"))

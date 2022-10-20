@@ -12,7 +12,6 @@ type userRepository struct {
 }
 
 type UserRepository interface {
-	GetAllPaginated(page int, rows int) ([]model.User, error)
 	GetAll() ([]model.User, error)
 	GetById(id string) (model.User, error)
 	GetByName(name string) ([]model.User, error)
@@ -30,18 +29,6 @@ func (p *userRepository) GetAll() ([]model.User, error) {
 		return nil, err
 	}
 
-	return users, nil
-}
-
-func (p *userRepository) GetAllPaginated(page int, rows int) ([]model.User, error) {
-	var users []model.User
-	limit := rows
-	offset := limit * (page - 1)
-
-	err := p.db.Select(&users, utils.USER_GET_ALL_PAGINATED, limit, offset)
-	if err != nil {
-		return nil, err
-	}
 	return users, nil
 }
 

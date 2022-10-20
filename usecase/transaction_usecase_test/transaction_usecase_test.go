@@ -61,6 +61,14 @@ func (r *repoMock) Insert(menu *model.Transaction) (model.Transaction, error) {
 	return args.Get(0).(model.Transaction), nil
 }
 
+func (r *repoMock) GetAllTest() ([]model.Transaction, error) {
+	args := r.Called()
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).([]model.Transaction), nil
+}
+
 func (r *repoMock) GetByIdTest(id string) (model.TransactionTest, error) {
 	args := r.Called(id)
 	if args.Get(1) != nil {

@@ -36,17 +36,21 @@ const (
 	TRANSACTION_GET_LAST_ID       = "SELECT id from transaction order by id desc limit 1"
 
 	TRANSACTION_INSERT = "INSERT INTO transaction(id, total_price) VALUES (:id, :total_price)"
-	TRANSACTION_UPDATE = "UPDATE transaction set total_price=:total_price where id=:id"
-	TRANSACTION_DELETE = "DELETE from transaction WHERE id=$1"
+	// TRANSACTION_UPDATE = "UPDATE transaction set total_price=:total_price where id=:id"
+	// TRANSACTION_DELETE = "DELETE from transaction WHERE id=$1"
+
+	TRANSACTION_INSERT_TEST = "INSERT INTO transaction(id, total_price) VALUES ($1, $2)"
 	// ==============================================================
 
-	TRANSACTION_DETAIL_INSERT                = "INSERT INTO transaction_detail(transaction_id, menu_id, qty, subtotal) VALUES ( :transaction_id, :menu_id, :qty, :subtotal)"
+	TRANSACTION_DETAIL_INSERT                = "INSERT INTO transaction_detail(transaction_id, menu_id, qty, subtotal) VALUES (:transaction_id, :menu_id, :qty, :subtotal)"
 	TRANSACTION_DETAIL_GET_ALL               = "SELECT transaction_id, menu_id, qty, subtotal from transaction_detail "
 	TRANSACTION_DETAIL_GET_BY_ID_TRANSACTION = TRANSACTION_DETAIL_GET_ALL + " where transaction_id = $1"
+
+	TRANSACTION_DETAIL_INSERT_TEST = "INSERT INTO transaction_detail(transaction_id, menu_id, qty, subtotal) VALUES ($1, $2, $3, $4)"
 	// ==============================================================
 
-	GET_DAILY_REPORT   = "SELECT date, COUNT(id) as transaction, SUM(total_price) as income from transaction group by date"
-	GET_MONTHLY_REPORT = "SELECT date, COUNT(id) as transaction, SUM(total_price) as income from transaction where date between $1 and $2"
+// 	GET_DAILY_REPORT   = "SELECT date, COUNT(id) as transaction, SUM(total_price) as income from transaction group by date"
+// 	GET_MONTHLY_REPORT = "SELECT date, COUNT(id) as transaction, SUM(total_price) as income from transaction where date between $1 and $2"
 
-	GET_OVERALL_REPORT = "SELECT date, COUNT(id) as transaction, SUM(total_price) as income from transaction"
+// GET_OVERALL_REPORT = "SELECT date, COUNT(id) as transaction, SUM(total_price) as income from transaction"
 )

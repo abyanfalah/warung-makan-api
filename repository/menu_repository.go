@@ -12,7 +12,7 @@ type menuRepository struct {
 }
 
 type MenuRepository interface {
-	GetAllPaginated(page int, rows int) ([]model.Menu, error)
+	// GetAllPaginated(page int, rows int) ([]model.Menu, error)
 	GetAll() ([]model.Menu, error)
 	GetById(id string) (model.Menu, error)
 	GetByName(name string) ([]model.Menu, error)
@@ -32,17 +32,17 @@ func (p *menuRepository) GetAll() ([]model.Menu, error) {
 	return menus, nil
 }
 
-func (p *menuRepository) GetAllPaginated(page int, rows int) ([]model.Menu, error) {
-	var menus []model.Menu
-	limit := rows
-	offset := limit * (page - 1)
+// func (p *menuRepository) GetAllPaginated(page int, rows int) ([]model.Menu, error) {
+// 	var menus []model.Menu
+// 	limit := rows
+// 	offset := limit * (page - 1)
 
-	err := p.db.Select(&menus, utils.MENU_GET_ALL_PAGINATED, limit, offset)
-	if err != nil {
-		return nil, err
-	}
-	return menus, nil
-}
+// 	err := p.db.Select(&menus, utils.MENU_GET_ALL_PAGINATED, limit, offset)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return menus, nil
+// }
 
 func (p *menuRepository) GetById(id string) (model.Menu, error) {
 	var menu model.Menu

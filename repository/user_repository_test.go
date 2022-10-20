@@ -64,29 +64,29 @@ func (suite *UserRepositoryTestSuite) TearDownTest() {
 	// Gak perlu teardown. Mungkin karena sql.DB gak dipake. Yang dipake hanya sqlx.DB
 }
 
-func (suite *UserRepositoryTestSuite) TestGetAll_Success() {
+func (suite *UserRepositoryTestSuite) TestGetAllUser_Success() {
 	rows := sqlmock.NewRows([]string{"id", "name", "username", "image"})
 	for _, dummy := range dummyUsers {
 		rows.AddRow(dummy.Id, dummy.Name, dummy.Username, dummy.Image)
 	}
 
-	suite.mockSql.ExpectQuery(utils.USER_GET_ALL).WillReturnRows(rows)
+	suite.mockSql.ExpectQuery(regexp.QuoteMeta(utils.USER_GET_ALL)).WillReturnRows(rows)
 
 	repo := repository.NewUserRepository(suite.mockSqlxDb)
 	actual, err := repo.GetAll()
 
 	assert.Nil(suite.T(), err)
 	assert.Equal(suite.T(), 2, len(actual))
-	assert.Equal(suite.T(), "dummy id 1", actual[0].Id)
+	assert.Equal(suite.T(), dummyUsers[0].Id, actual[0].Id)
 }
 
-func (suite *UserRepositoryTestSuite) TestGetAll_Failed() {
+func (suite *UserRepositoryTestSuite) TestGetAllUser_Failed() {
 	rows := sqlmock.NewRows([]string{"id failed", "name failed", "username failed", "image failed"})
 	for _, dummy := range dummyUsers {
 		rows.AddRow(dummy.Id, dummy.Name, dummy.Username, dummy.Image)
 	}
 
-	suite.mockSql.ExpectQuery(utils.USER_GET_ALL).WillReturnError(errors.New("failed to retrieve user list"))
+	suite.mockSql.ExpectQuery(regexp.QuoteMeta(utils.USER_GET_ALL)).WillReturnError(errors.New("failed to retrieve user list"))
 
 	repo := repository.NewUserRepository(suite.mockSqlxDb)
 	actual, err := repo.GetAll()
@@ -96,26 +96,27 @@ func (suite *UserRepositoryTestSuite) TestGetAll_Failed() {
 
 }
 
-func (suite *UserRepositoryTestSuite) TestGetById_Success() {
+func (suite *UserRepositoryTestSuite) TestGetByIdUser_Success() {
 	dummy := dummyUsers[0]
 	row := sqlmock.NewRows([]string{"id", "name", "username", "image"})
 	row.AddRow(dummy.Id, dummy.Name, dummy.Username, dummy.Image)
 
-	suite.mockSql.ExpectQuery(utils.USER_GET_BY_ID).WillReturnRows(row)
+	suite.mockSql.ExpectQuery(regexp.QuoteMeta(utils.USER_GET_BY_ID)).WillReturnRows(row)
 
 	repo := repository.NewUserRepository(suite.mockSqlxDb)
 	actual, err := repo.GetById(dummy.Id)
 
-	assert.Error(suite.T(), err)
+	assert.Nil(suite.T(), err)
 	assert.NotNil(suite.T(), actual)
+	assert.Equal(suite.T(), dummy.Id, actual.Id)
 }
 
-func (suite *UserRepositoryTestSuite) TestGetById_Failed() {
+func (suite *UserRepositoryTestSuite) TestGetByIdUser_Failed() {
 	dummy := dummyUsers[0]
 	row := sqlmock.NewRows([]string{"id failed", "name failed", "username failed", "image failed"})
 	row.AddRow(dummy.Id, dummy.Name, dummy.Username, dummy.Image)
 
-	suite.mockSql.ExpectQuery(utils.USER_GET_BY_ID).WillReturnError(errors.New("failed to retrieve user"))
+	suite.mockSql.ExpectQuery(regexp.QuoteMeta(utils.USER_GET_BY_ID)).WillReturnError(errors.New("failed to retrieve user"))
 
 	repo := repository.NewUserRepository(suite.mockSqlxDb)
 	actual, err := repo.GetById(dummy.Id)
@@ -124,21 +125,22 @@ func (suite *UserRepositoryTestSuite) TestGetById_Failed() {
 	assert.Equal(suite.T(), model.User{}, actual)
 }
 
-func (suite *UserRepositoryTestSuite) TestGetByName_Success() {
+func (suite *UserRepositoryTestSuite) TestGetByNameUser_Success() {
 	dummy := dummyUsers[0]
 	row := sqlmock.NewRows([]string{"id", "name", "username", "image"})
 	row.AddRow(dummy.Id, dummy.Name, dummy.Username, dummy.Image)
 
-	suite.mockSql.ExpectQuery(utils.USER_GET_BY_NAME).WillReturnRows(row)
+	suite.mockSql.ExpectQuery(regexp.QuoteMeta(utils.USER_GET_BY_NAME)).WillReturnRows(row)
 
 	repo := repository.NewUserRepository(suite.mockSqlxDb)
-	actual, err := repo.GetById(dummy.Id)
+	actual, err := repo.GetByName("dummy 1")
 
-	assert.Error(suite.T(), err)
+	assert.Nil(suite.T(), err)
 	assert.NotNil(suite.T(), actual)
+	assert.Equal(suite.T(), 1, len(actual))
 }
 
-func (suite *UserRepositoryTestSuite) TestGetByName_Failed() {
+func (suite *UserRepositoryTestSuite) TestGetByNameUser_Failed() {
 	dummy := dummyUsers[0]
 	row := sqlmock.NewRows([]string{"id failed", "name failed", "username failed", "image failed"})
 	row.AddRow(dummy.Id, dummy.Name, dummy.Username, dummy.Image)
@@ -146,44 +148,46 @@ func (suite *UserRepositoryTestSuite) TestGetByName_Failed() {
 	suite.mockSql.ExpectQuery(utils.USER_GET_BY_NAME).WillReturnError(errors.New("failed to retrieve user"))
 
 	repo := repository.NewUserRepository(suite.mockSqlxDb)
-	actual, err := repo.GetById(dummy.Id)
+	actual, err := repo.GetByName(dummy.Name)
 
 	assert.Error(suite.T(), err)
-	assert.Equal(suite.T(), model.User{}, actual)
+	assert.Equal(suite.T(), 0, len(actual))
 }
 
-func (suite *UserRepositoryTestSuite) TestGetByCredential_Success() {
+func (suite *UserRepositoryTestSuite) TestGetByCredentialUser_Success() {
 	dummy := dummyUsers[0]
 	row := sqlmock.NewRows([]string{"id", "name", "username", "image"})
 	row.AddRow(dummy.Id, dummy.Name, dummy.Username, dummy.Image)
 
-	suite.mockSql.ExpectQuery(utils.USER_GET_BY_CREDENTIALS).WillReturnRows(row)
+	suite.mockSql.ExpectQuery(regexp.QuoteMeta(utils.USER_GET_BY_CREDENTIALS)).WillReturnRows(row)
 
 	repo := repository.NewUserRepository(suite.mockSqlxDb)
-	actual, err := repo.GetById(dummy.Id)
+	actual, err := repo.GetByCredentials(dummy.Username, dummy.Password)
 
-	assert.Error(suite.T(), err)
+	assert.Nil(suite.T(), err)
 	assert.NotNil(suite.T(), actual)
+	assert.Equal(suite.T(), dummy, actual)
 }
 
-func (suite *UserRepositoryTestSuite) TestGetByCredential_Failed() {
+func (suite *UserRepositoryTestSuite) TestGetByCredentialUser_Failed() {
 	dummy := dummyUsers[0]
-	row := sqlmock.NewRows([]string{"id failed", "name failed", "username failed", "image failed"})
+	row := sqlmock.NewRows([]string{"id", "name", "username", "image"})
 	row.AddRow(dummy.Id, dummy.Name, dummy.Username, dummy.Image)
 
-	suite.mockSql.ExpectQuery(utils.USER_GET_BY_CREDENTIALS).WillReturnError(errors.New("failed to retrieve user"))
+	suite.mockSql.ExpectQuery(regexp.QuoteMeta(utils.USER_GET_BY_CREDENTIALS)).WillReturnError(errors.New("failed"))
 
 	repo := repository.NewUserRepository(suite.mockSqlxDb)
-	actual, err := repo.GetById(dummy.Id)
+	actual, err := repo.GetByCredentials(dummy.Username, dummy.Password)
 
 	assert.Error(suite.T(), err)
-	assert.Equal(suite.T(), model.User{}, actual)
+	assert.NotEqual(suite.T(), dummy, actual)
 }
 
-func (suite *UserRepositoryTestSuite) TestInsert_Success() {
+func (suite *UserRepositoryTestSuite) TestInsertUser_Success() {
 	var dummy = dummyUsers[0]
 
 	suite.mockSql.ExpectExec(regexp.QuoteMeta(utils.USER_INSERT_TEST)).WithArgs(dummy.Id, dummy.Name, dummy.Username, dummy.Password, dummy.Image).WillReturnResult(sqlmock.NewResult(1, 1))
+	// return
 
 	repo := repository.NewUserRepository(suite.mockSqlxDb)
 	actual, err := repo.Insert(&dummy)
@@ -192,7 +196,7 @@ func (suite *UserRepositoryTestSuite) TestInsert_Success() {
 	assert.Equal(suite.T(), dummy, actual)
 }
 
-func (suite *UserRepositoryTestSuite) TestInsert_Failed() {
+func (suite *UserRepositoryTestSuite) TestInsertUser_Failed() {
 	var dummy = dummyUsers[0]
 
 	suite.mockSql.ExpectExec(regexp.QuoteMeta(utils.USER_INSERT_TEST)).WillReturnError(errors.New("insert failed"))
@@ -204,7 +208,7 @@ func (suite *UserRepositoryTestSuite) TestInsert_Failed() {
 	assert.Equal(suite.T(), model.User{}, actual)
 }
 
-func (suite *UserRepositoryTestSuite) TestUpdate_Success() {
+func (suite *UserRepositoryTestSuite) TestUpdateUser_Success() {
 	var dummy = dummyUsers[0]
 
 	// suite.mockSql.ExpectExec(utils.USER_UPDATE_TEST).WithArgs(dummy.Id, dummy.Name, dummy.Username, dummy.Password, dummy.Image).WillReturnResult(sqlmock.NewResult(1, 1))
@@ -217,7 +221,7 @@ func (suite *UserRepositoryTestSuite) TestUpdate_Success() {
 	assert.Equal(suite.T(), dummy, actual)
 }
 
-func (suite *UserRepositoryTestSuite) TestUpdate_Failed() {
+func (suite *UserRepositoryTestSuite) TestUpdateUser_Failed() {
 	var dummy = dummyUsers[0]
 
 	suite.mockSql.ExpectExec(regexp.QuoteMeta(utils.USER_UPDATE_TEST)).WillReturnError(errors.New("update failed"))
@@ -229,7 +233,7 @@ func (suite *UserRepositoryTestSuite) TestUpdate_Failed() {
 	assert.Equal(suite.T(), model.User{}, actual)
 }
 
-func (suite *UserRepositoryTestSuite) TestDelete_Success() {
+func (suite *UserRepositoryTestSuite) TestDeleteUser_Success() {
 	var dummy = dummyUsers[0]
 
 	suite.mockSql.ExpectExec(regexp.QuoteMeta(utils.USER_DELETE)).WithArgs(dummy.Id).WillReturnResult(sqlmock.NewResult(1, 1))
@@ -240,7 +244,7 @@ func (suite *UserRepositoryTestSuite) TestDelete_Success() {
 	assert.Nil(suite.T(), err)
 }
 
-func (suite *UserRepositoryTestSuite) TestDelete_Failed() {
+func (suite *UserRepositoryTestSuite) TestDeleteUser_Failed() {
 	var dummy = dummyUsers[0]
 
 	suite.mockSql.ExpectExec(regexp.QuoteMeta(utils.USER_DELETE)).WillReturnError(errors.New("delete failed"))
