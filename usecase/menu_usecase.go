@@ -11,7 +11,7 @@ type menuUsecase struct {
 
 type MenuUsecase interface {
 	GetAll() ([]model.Menu, error)
-	GetAllPaginated(page int, rows int) ([]model.Menu, error)
+	// GetAllPaginated(page int, rows int) ([]model.Menu, error)
 	GetById(id string) (model.Menu, error)
 	GetByName(name string) ([]model.Menu, error)
 	Insert(menu *model.Menu) (model.Menu, error)
@@ -24,9 +24,9 @@ func (p *menuUsecase) GetAll() ([]model.Menu, error) {
 
 }
 
-func (p *menuUsecase) GetAllPaginated(page int, rows int) ([]model.Menu, error) {
-	return p.menuRepository.GetAllPaginated(page, rows)
-}
+// func (p *menuUsecase) GetAllPaginated(page int, rows int) ([]model.Menu, error) {
+// 	return p.menuRepository.GetAllPaginated(page, rows)
+// }
 
 func (p *menuUsecase) GetById(id string) (model.Menu, error) {
 	return p.menuRepository.GetById(id)

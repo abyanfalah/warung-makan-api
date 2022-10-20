@@ -11,7 +11,6 @@ type userUsecase struct {
 
 type UserUsecase interface {
 	GetAll() ([]model.User, error)
-	GetAllPaginated(page int, rows int) ([]model.User, error)
 	GetById(id string) (model.User, error)
 	GetByName(name string) ([]model.User, error)
 	GetByCredentials(username, password string) (model.User, error)
@@ -24,10 +23,6 @@ type UserUsecase interface {
 func (p *userUsecase) GetAll() ([]model.User, error) {
 	return p.userRepository.GetAll()
 
-}
-
-func (p *userUsecase) GetAllPaginated(page int, rows int) ([]model.User, error) {
-	return p.userRepository.GetAllPaginated(page, rows)
 }
 
 func (p *userUsecase) GetById(id string) (model.User, error) {

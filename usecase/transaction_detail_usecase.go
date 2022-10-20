@@ -1,49 +1,48 @@
 package usecase
 
-import (
-	"warung-makan/model"
-	"warung-makan/repository"
-)
+// import (
+// 	"warung-makan/model"
+// 	"warung-makan/repository"
+// )
 
-type transactionDetailUsecase struct {
-	transactionDetailRepository repository.TransactionDetailRepository
-}
+// // import (
+// // 	"warung-makan/model"
+// // 	"warung-makan/repository"
+// // )
 
-type TransactionDetailUsecase interface {
-	GetAll() ([]model.TransactionDetail, error)
-	GetAllPaginated(page int, rows int) ([]model.TransactionDetail, error)
-	GetById(id string) (model.TransactionDetail, error)
-	Insert(transactionDetail *model.TransactionDetail) (model.TransactionDetail, error)
-	Update(transactionDetail *model.TransactionDetail) (model.TransactionDetail, error)
-	Delete(id string) error
-}
+// type transactionDetailUsecase struct {
+// 	transactionDetailRepository repository.TransactionDetailRepository
+// }
 
-func (p *transactionDetailUsecase) GetAll() ([]model.TransactionDetail, error) {
-	return p.transactionDetailRepository.GetAll()
-}
+// type TransactionDetailUsecase interface {
+// 	GetAll() ([]model.TransactionDetail, error)
+// 	GetAllPaginated(page int, rows int) ([]model.TransactionDetail, error)
+// 	// GetById(id string) (model.TransactionDetail, error)
+// 	Insert(transactionDetail *model.TransactionDetail) (model.TransactionDetail, error)
+// }
 
-func (p *transactionDetailUsecase) GetAllPaginated(page int, rows int) ([]model.TransactionDetail, error) {
-	return p.transactionDetailRepository.GetAllPaginated(page, rows)
-}
+// // func (p *transactionDetailUsecase) GetAll() ([]model.TransactionDetail, error) {
+// // 	return p.transactionDetailRepository.GetAll()
+// // }
 
-func (p *transactionDetailUsecase) GetById(id string) (model.TransactionDetail, error) {
-	return p.transactionDetailRepository.GetById(id)
-}
+// // func (p *transactionDetailUsecase) GetById(id string) (model.TransactionDetail, error) {
+// // 	return p.transactionDetailRepository.GetById(id)
+// // }
 
-func (p *transactionDetailUsecase) Insert(newTransactionDetail *model.TransactionDetail) (model.TransactionDetail, error) {
-	return p.transactionDetailRepository.Insert(newTransactionDetail)
-}
+// // func (p *transactionDetailUsecase) Insert(newTransactionDetail *model.TransactionDetail) (model.TransactionDetail, error) {
+// // 	return p.transactionDetailRepository.Insert(newTransactionDetail)
+// // }
 
-func (p *transactionDetailUsecase) Update(newTransactionDetail *model.TransactionDetail) (model.TransactionDetail, error) {
-	return p.transactionDetailRepository.Update(newTransactionDetail)
-}
+// // func (p *transactionDetailUsecase) Update(newTransactionDetail *model.TransactionDetail) (model.TransactionDetail, error) {
+// // 	return p.transactionDetailRepository.Update(newTransactionDetail)
+// // }
 
-func (p *transactionDetailUsecase) Delete(id string) error {
-	return p.transactionDetailRepository.Delete(id)
-}
+// // func (p *transactionDetailUsecase) Delete(id string) error {
+// // 	return p.transactionDetailRepository.Delete(id)
+// // }
 
-func NewTransactionDetailUsecase(transactionDetailRepository repository.TransactionDetailRepository) TransactionDetailUsecase {
-	usecase := new(transactionDetailUsecase)
-	usecase.transactionDetailRepository = transactionDetailRepository
-	return usecase
-}
+// // func NewTransactionDetailUsecase(transactionDetailRepository repository.TransactionDetailRepository) TransactionDetailUsecase {
+// // 	usecase := new(transactionDetailUsecase)
+// // 	usecase.transactionDetailRepository = transactionDetailRepository
+// // 	return usecase
+// // }
