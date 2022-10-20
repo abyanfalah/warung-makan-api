@@ -25,10 +25,6 @@ var dummyUsers = []model.User{
 	},
 }
 
-type UsecaseManagerMock struct {
-	mock.Mock
-}
-
 type UserUsecaseMock struct {
 	mock.Mock
 }
