@@ -7,9 +7,7 @@ import (
 )
 
 func JsonDataResponse(ctx *gin.Context, data interface{}) {
-	ctx.JSON(http.StatusOK, gin.H{
-		"data": data,
-	})
+	ctx.JSON(http.StatusOK, data)
 }
 
 func JsonDataMessageResponse(ctx *gin.Context, data interface{}, message string) {

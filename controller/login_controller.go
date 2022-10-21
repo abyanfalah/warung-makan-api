@@ -3,8 +3,8 @@ package controller
 import (
 	"net/http"
 	"warung-makan/config"
-	"warung-makan/manager"
 	"warung-makan/model"
+	"warung-makan/usecase"
 	"warung-makan/utils"
 	"warung-makan/utils/authenticator"
 
@@ -12,8 +12,8 @@ import (
 )
 
 type LoginController struct {
-	ucMan  manager.UsecaseManager
-	router *gin.Engine
+	usecase usecase.UserUsecase
+	router  *gin.Engine
 }
 
 func (lc *LoginController) Login(ctx *gin.Context) {
@@ -26,7 +26,7 @@ func (lc *LoginController) Login(ctx *gin.Context) {
 		return
 	}
 
-	user, err := lc.ucMan.UserUsecase().GetByCredentials(credential.Username, credential.Password)
+	user, err := lc.usecase.GetByCredentials(credential.Username, credential.Password)
 	if err != nil {
 		utils.JsonErrorBadRequest(ctx, err, "invalid credentials")
 		return
@@ -44,13 +44,40 @@ func (lc *LoginController) Login(ctx *gin.Context) {
 	})
 }
 
-func NewLoginController(ucMan manager.UsecaseManager, router *gin.Engine) *LoginController {
+func (lc *LoginController) LoginTest(ctx *gin.Context) {
+	var credential model.Credential
+	accessToken := authenticator.NewAccessToken(config.NewConfig().TokenConfig)
+
+	err := ctx.ShouldBindJSON(&credential)
+
+	if err != nil {
+		utils.JsonErrorBadRequest(ctx, err, "cant bind struct")
+		return
+	}
+
+	user, err := lc.usecase.GetByCredentials(credential.Username, credential.Password)
+	if err != nil {
+		utils.JsonErrorBadRequest(ctx, err, "invalid credentials")
+		return
+	}
+
+	_, err = accessToken.GenerateAccessToken(&user)
+	if err != nil {
+		utils.JsonErrorBadGateway(ctx, err, "cannot generate token")
+		return
+	}
+
+	ctx.JSON(http.StatusOK, user)
+}
+
+func NewLoginController(usecase usecase.UserUsecase, router *gin.Engine) *LoginController {
 	controller := LoginController{
-		ucMan:  ucMan,
-		router: router,
+		usecase: usecase,
+		router:  router,
 	}
 
 	router.POST("/login", controller.Login)
+	router.POST("/test/login", controller.LoginTest)
 
 	return &controller
 }

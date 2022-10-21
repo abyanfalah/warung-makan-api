@@ -34,10 +34,10 @@ func NewAppServer() *appServer {
 func (a *appServer) initHandlers() {
 	controller.NewController(a.ucMan, a.engine)
 
-	controller.NewUserController(a.ucMan, a.engine)
-	controller.NewMenuController(a.ucMan, a.engine)
-	controller.NewTransactionController(a.ucMan, a.engine)
-	controller.NewLoginController(a.ucMan, a.engine)
+	controller.NewUserController(a.ucMan.UserUsecase(), a.engine)
+	controller.NewMenuController(a.ucMan.MenuUsecase(), a.engine)
+	controller.NewTransactionController(a.ucMan.TransactionUsecase(), a.ucMan.MenuUsecase(), a.engine)
+	controller.NewLoginController(a.ucMan.UserUsecase(), a.engine)
 }
 
 func (a *appServer) Run() {

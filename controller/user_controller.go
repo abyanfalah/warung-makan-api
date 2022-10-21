@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 	"warung-makan/config"
-	"warung-makan/manager"
 	"warung-makan/middleware"
 	"warung-makan/model"
+	"warung-makan/usecase"
 	"warung-makan/utils"
 	"warung-makan/utils/authenticator"
 
@@ -15,13 +15,13 @@ import (
 )
 
 type UserController struct {
-	ucMan  manager.UsecaseManager
-	router *gin.Engine
+	usecase usecase.UserUsecase
+	router  *gin.Engine
 }
 
 func (c *UserController) ListUser(ctx *gin.Context) {
 	if name := ctx.Query("name"); name != "" {
-		user, err := c.ucMan.UserUsecase().GetByName(ctx.Query("name"))
+		user, err := c.usecase.GetByName(ctx.Query("name"))
 
 		if err != nil {
 			utils.JsonErrorBadRequest(ctx, err, "cannot get list")
@@ -37,7 +37,7 @@ func (c *UserController) ListUser(ctx *gin.Context) {
 		return
 	}
 
-	list, err := c.ucMan.UserUsecase().GetAll()
+	list, err := c.usecase.GetAll()
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "cannot get user list")
 		return
@@ -47,7 +47,7 @@ func (c *UserController) ListUser(ctx *gin.Context) {
 }
 
 func (c *UserController) GetById(ctx *gin.Context) {
-	user, err := c.ucMan.UserUsecase().GetById(ctx.Param("id"))
+	user, err := c.usecase.GetById(ctx.Param("id"))
 	if err != nil {
 		utils.JsonErrorBadRequest(ctx, err, "cannot get user")
 		return
@@ -62,7 +62,6 @@ func (c *UserController) CreateNewUser(ctx *gin.Context) {
 
 	err := ctx.ShouldBind(&user)
 	if err != nil {
-		// utils.JsonErrorBadRequest(ctx, err, "cant bind struct")
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 			"data":  user,
@@ -87,7 +86,7 @@ func (c *UserController) CreateNewUser(ctx *gin.Context) {
 
 	user.Id = id
 	user.Image = id + ".jpg"
-	user, err = c.ucMan.UserUsecase().Insert(&user)
+	user, err = c.usecase.Insert(&user)
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "insert failed")
 		return
@@ -110,7 +109,7 @@ func (c *UserController) UpdateUser(ctx *gin.Context) {
 	}
 
 	user.Id = ctx.Param("id")
-	updatedUser, err := c.ucMan.UserUsecase().Update(&user)
+	updatedUser, err := c.usecase.Update(&user)
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "update failed")
 		return
@@ -120,13 +119,13 @@ func (c *UserController) UpdateUser(ctx *gin.Context) {
 }
 
 func (c *UserController) DeleteUser(ctx *gin.Context) {
-	user, err := c.ucMan.UserUsecase().GetById(ctx.Param("id"))
+	user, err := c.usecase.GetById(ctx.Param("id"))
 	if err != nil {
 		utils.JsonErrorBadRequest(ctx, err, "user not found")
 		return
 	}
 
-	err = c.ucMan.UserUsecase().Delete(user.Id)
+	err = c.usecase.Delete(user.Id)
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "cannot delete user")
 		return
@@ -151,10 +150,10 @@ func (c *UserController) GetUserImage(ctx *gin.Context) {
 	ctx.File(imagePath)
 }
 
-func NewUserController(usecaseManager manager.UsecaseManager, router *gin.Engine) *UserController {
+func NewUserController(usecase usecase.UserUsecase, router *gin.Engine) *UserController {
 	controller := UserController{
-		ucMan:  usecaseManager,
-		router: router,
+		usecase: usecase,
+		router:  router,
 	}
 	authMiddleware := middleware.NewAuthTokenMiddleware(authenticator.NewAccessToken(config.NewConfig().TokenConfig))
 

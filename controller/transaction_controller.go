@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 	"warung-makan/config"
-	"warung-makan/manager"
 	"warung-makan/middleware"
 	"warung-makan/model"
+	"warung-makan/usecase"
 	"warung-makan/utils"
 	"warung-makan/utils/authenticator"
 
@@ -14,12 +14,13 @@ import (
 )
 
 type TransactionController struct {
-	ucMan  manager.UsecaseManager
-	router *gin.Engine
+	usecase     usecase.TransactionUsecase
+	menuUsecase usecase.MenuUsecase
+	router      *gin.Engine
 }
 
 func (c *TransactionController) ListTransaction(ctx *gin.Context) {
-	list, err := c.ucMan.TransactionUsecase().GetAll()
+	list, err := c.usecase.GetAll()
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "cannot get transaction list")
 	}
@@ -28,7 +29,7 @@ func (c *TransactionController) ListTransaction(ctx *gin.Context) {
 }
 
 func (c *TransactionController) GetById(ctx *gin.Context) {
-	transaction, err := c.ucMan.TransactionUsecase().GetById(ctx.Param("id"))
+	transaction, err := c.usecase.GetById(ctx.Param("id"))
 	if err != nil {
 		utils.JsonErrorBadRequest(ctx, err, "cannot get transaction")
 	}
@@ -48,7 +49,7 @@ func (c *TransactionController) CreateNewTransaction(ctx *gin.Context) {
 	transaction.Id = utils.GenerateId()
 	// fill transaction details
 	for i, each := range transaction.Items {
-		menu, err := c.ucMan.MenuUsecase().GetById(each.MenuId)
+		menu, err := c.menuUsecase.GetById(each.MenuId)
 		if err != nil {
 			fmt.Println("cant find the menu")
 			continue
@@ -68,7 +69,7 @@ func (c *TransactionController) CreateNewTransaction(ctx *gin.Context) {
 		return
 	}
 
-	newTransaction, err := c.ucMan.TransactionUsecase().Insert(&transaction)
+	newTransaction, err := c.usecase.Insert(&transaction)
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "insert failed")
 		return
@@ -87,7 +88,7 @@ func (c *TransactionController) CreateNewTransaction(ctx *gin.Context) {
 // 	}
 
 // 	transaction.Id = ctx.Param("id")
-// 	updatedTransaction, err := c.ucMan.TransactionUsecase().Update(&transaction)
+// 	updatedTransaction, err := c.usecase.Update(&transaction)
 // 	if err != nil {
 // 		utils.JsonErrorBadGateway(ctx, err, "update failed")
 // 		return
@@ -97,13 +98,13 @@ func (c *TransactionController) CreateNewTransaction(ctx *gin.Context) {
 // }
 
 // func (c *TransactionController) DeleteTransaction(ctx *gin.Context) {
-// 	transaction, err := c.ucMan.TransactionUsecase().GetById(ctx.Param("id"))
+// 	transaction, err := c.usecase.GetById(ctx.Param("id"))
 // 	if err != nil {
 // 		utils.JsonErrorBadRequest(ctx, err, "transaction not found")
 // 		return
 // 	}
 
-// 	err = c.ucMan.TransactionUsecase().Delete(transaction.Id)
+// 	err = c.usecase.Delete(transaction.Id)
 // 	if err != nil {
 // 		utils.JsonErrorBadGateway(ctx, err, "cannot delete transaction")
 // 	}
@@ -111,10 +112,11 @@ func (c *TransactionController) CreateNewTransaction(ctx *gin.Context) {
 // 	utils.JsonSuccessMessage(ctx, "Transaction deleted")
 // }
 
-func NewTransactionController(usecaseManager manager.UsecaseManager, router *gin.Engine) *TransactionController {
+func NewTransactionController(usecase usecase.TransactionUsecase, menuUsecase usecase.MenuUsecase, router *gin.Engine) *TransactionController {
 	controller := TransactionController{
-		ucMan:  usecaseManager,
-		router: router,
+		usecase:     usecase,
+		menuUsecase: menuUsecase,
+		router:      router,
 	}
 	authMiddleware := middleware.NewAuthTokenMiddleware(authenticator.NewAccessToken(config.NewConfig().TokenConfig))
 

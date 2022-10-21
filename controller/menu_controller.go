@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 	"warung-makan/config"
-	"warung-makan/manager"
 	"warung-makan/middleware"
 	"warung-makan/model"
+	"warung-makan/usecase"
 	"warung-makan/utils"
 	"warung-makan/utils/authenticator"
 
@@ -15,13 +15,13 @@ import (
 )
 
 type MenuController struct {
-	ucMan  manager.UsecaseManager
-	router *gin.Engine
+	usecase usecase.MenuUsecase
+	router  *gin.Engine
 }
 
 func (c *MenuController) ListMenu(ctx *gin.Context) {
 	if name := ctx.Query("name"); name != "" {
-		menu, err := c.ucMan.MenuUsecase().GetByName(ctx.Query("name"))
+		menu, err := c.usecase.GetByName(ctx.Query("name"))
 
 		if err != nil {
 			utils.JsonErrorBadRequest(ctx, err, "cannot get list")
@@ -37,7 +37,7 @@ func (c *MenuController) ListMenu(ctx *gin.Context) {
 		return
 	}
 
-	list, err := c.ucMan.MenuUsecase().GetAll()
+	list, err := c.usecase.GetAll()
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "cannot get menu list")
 		return
@@ -47,7 +47,7 @@ func (c *MenuController) ListMenu(ctx *gin.Context) {
 }
 
 func (c *MenuController) GetById(ctx *gin.Context) {
-	menu, err := c.ucMan.MenuUsecase().GetById(ctx.Param("id"))
+	menu, err := c.usecase.GetById(ctx.Param("id"))
 	if err != nil {
 		utils.JsonErrorBadRequest(ctx, err, "cannot get menu")
 		return
@@ -81,7 +81,7 @@ func (c *MenuController) CreateNewMenu(ctx *gin.Context) {
 	}
 
 	menu.Image = menu.Id + ".jpg"
-	newMenu, err := c.ucMan.MenuUsecase().Insert(&menu)
+	newMenu, err := c.usecase.Insert(&menu)
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "insert failed")
 		return
@@ -100,7 +100,7 @@ func (c *MenuController) UpdateMenu(ctx *gin.Context) {
 	}
 
 	menu.Id = ctx.Param("id")
-	updatedMenu, err := c.ucMan.MenuUsecase().Update(&menu)
+	updatedMenu, err := c.usecase.Update(&menu)
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "update failed")
 		return
@@ -110,13 +110,13 @@ func (c *MenuController) UpdateMenu(ctx *gin.Context) {
 }
 
 func (c *MenuController) DeleteMenu(ctx *gin.Context) {
-	menu, err := c.ucMan.MenuUsecase().GetById(ctx.Param("id"))
+	menu, err := c.usecase.GetById(ctx.Param("id"))
 	if err != nil {
 		utils.JsonErrorBadRequest(ctx, err, "menu not found")
 		return
 	}
 
-	err = c.ucMan.MenuUsecase().Delete(menu.Id)
+	err = c.usecase.Delete(menu.Id)
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "cannot delete menu")
 		return
@@ -142,10 +142,10 @@ func (c *MenuController) GetMenuImage(ctx *gin.Context) {
 	ctx.File(imagePath)
 }
 
-func NewMenuController(usecaseManager manager.UsecaseManager, router *gin.Engine) *MenuController {
+func NewMenuController(usecase usecase.MenuUsecase, router *gin.Engine) *MenuController {
 	controller := MenuController{
-		ucMan:  usecaseManager,
-		router: router,
+		usecase: usecase,
+		router:  router,
 	}
 	authMiddleware := middleware.NewAuthTokenMiddleware(authenticator.NewAccessToken(config.NewConfig().TokenConfig))
 
