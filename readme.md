@@ -2,7 +2,7 @@
 
 ## Config
 Change the value of constants in main.go to suit your need.
-Port can be leave blank, the app will automatically initiate
+Port can be left blank, the app will automatically initiate
 the API at port :8000, and will iterate if the current port
 is used.
 
