@@ -7,8 +7,10 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"warung-makan/config"
 	"warung-makan/controller"
 	"warung-makan/model"
+	"warung-makan/utils/authenticator"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
@@ -20,8 +22,8 @@ var dummyUsers = []model.User{
 	{
 		Id:       "dummy id 1",
 		Name:     "dummy name 1",
-		Username: "dummy username 1",
-		Password: "dummy password 1",
+		Username: "dummyusername1",
+		Password: "dummypassword1",
 		Image:    "dummy image path 1",
 	},
 	{
@@ -32,6 +34,12 @@ var dummyUsers = []model.User{
 		Image:    "dummy image path 2",
 	},
 }
+
+var auth = authenticator.NewAccessToken(config.NewConfig().TokenConfig)
+var token, _ = auth.GenerateAccessToken(&model.User{
+	Username: "admin",
+	Password: "admin",
+})
 
 type ErrorResponse struct {
 	Error   string
@@ -289,38 +297,18 @@ func (suite UserControllerTestSuite) TestLoginUserApi_Failed() {
 	assert.Equal(suite.T(), model.User{}, actualUser)
 }
 
-// func (suite UserControllerTestSuite) TestGetByIdUserApi_Failed() {
-// 	user := dummyUsers[0]
-// 	suite.useCaseMock.On("GetById", user.Id).Return(model.User{}, errors.New("failed"))
-
-// 	controller.NewUserController(suite.useCaseMock, suite.routerMock)
-
-// 	r := httptest.NewRecorder()
-// 	request, _ := http.NewRequest(http.MethodGet, "/user/"+user.Id, nil)
-// 	suite.routerMock.ServeHTTP(r, request)
-
-// 	var actualUser model.User
-// 	response := r.Body.String()
-
-// 	json.Unmarshal([]byte(response), &actualUser)
-
-// 	assert.Equal(suite.T(), http.StatusBadRequest, r.Code)
-// 	assert.NotEqual(suite.T(), user, actualUser)
-// }
-
-func (suite UserControllerTestSuite) TestInsertUserApi_Success() {
+func (suite UserControllerTestSuite) TestInsertUserNoImageApi_Success() {
 	user := dummyUsers[0]
 
-	suite.useCaseMock.On("Insert", user).Return(user, nil)
+	suite.useCaseMock.On("Insert", &user).Return(user, nil)
 
 	controller.NewUserController(suite.useCaseMock, suite.routerMock)
 
 	r := httptest.NewRecorder()
-	// formData := struct{
 
-	// }
-	body, _ := json.Marshal(user)
-	request, err := http.NewRequest(http.MethodPost, "/user", bytes.NewBuffer(body))
+	reqBody, _ := json.Marshal(user)
+	request, err := http.NewRequest(http.MethodPost, "/user/no_image", bytes.NewBuffer(reqBody))
+	request.Header.Add("Authorization", "Bearer "+token)
 	suite.routerMock.ServeHTTP(r, request)
 
 	var actualUser = model.User{}
@@ -330,8 +318,178 @@ func (suite UserControllerTestSuite) TestInsertUserApi_Success() {
 	assert.Nil(suite.T(), err)
 	assert.Nil(suite.T(), jsonerr)
 	assert.Equal(suite.T(), http.StatusOK, r.Code)
-	return
-	assert.Equal(suite.T(), user.Id, actualUser.Id)
+	assert.Equal(suite.T(), user.Name, actualUser.Name)
+	assert.Equal(suite.T(), user.Username, actualUser.Username)
+	assert.Equal(suite.T(), user.Password, actualUser.Password)
+
+}
+
+func (suite UserControllerTestSuite) TestInsertUserNoImageApi_FailedBinding() {
+	suite.useCaseMock.On("Insert").Return(model.Menu{}, errors.New("failed"))
+
+	controller.NewUserController(suite.useCaseMock, suite.routerMock)
+
+	r := httptest.NewRecorder()
+
+	request, _ := http.NewRequest(http.MethodPost, "/user/no_image", nil)
+	request.Header.Add("Authorization", "Bearer "+token)
+	suite.routerMock.ServeHTTP(r, request)
+
+	var actualUser = model.User{}
+	response := r.Body.String()
+	json.Unmarshal([]byte(response), &actualUser)
+
+	assert.Equal(suite.T(), http.StatusBadRequest, r.Code)
+	assert.Equal(suite.T(), model.User{}, actualUser)
+}
+
+func (suite UserControllerTestSuite) TestInsertUserNoImageApi_Failed() {
+	user := dummyUsers[0]
+	suite.useCaseMock.On("Insert", &user).Return(model.Menu{}, errors.New("failed"))
+
+	controller.NewUserController(suite.useCaseMock, suite.routerMock)
+
+	r := httptest.NewRecorder()
+
+	reqBody, _ := json.Marshal(user)
+	request, _ := http.NewRequest(http.MethodPost, "/user/no_image", bytes.NewBuffer(reqBody))
+	request.Header.Add("Authorization", "Bearer "+token)
+	suite.routerMock.ServeHTTP(r, request)
+
+	var actualUser = model.User{}
+	response := r.Body.String()
+	json.Unmarshal([]byte(response), &actualUser)
+
+	assert.Equal(suite.T(), http.StatusBadGateway, r.Code)
+}
+
+func (suite UserControllerTestSuite) TestUpdateUserApi_Success() {
+	user := dummyUsers[0]
+
+	suite.useCaseMock.On("Update", &user).Return(user, nil)
+
+	controller.NewUserController(suite.useCaseMock, suite.routerMock)
+
+	r := httptest.NewRecorder()
+
+	reqBody, _ := json.Marshal(user)
+	request, err := http.NewRequest(http.MethodPut, "/user/"+user.Id, bytes.NewBuffer(reqBody))
+	request.Header.Add("Authorization", "Bearer "+token)
+	suite.routerMock.ServeHTTP(r, request)
+
+	var actualUser = model.User{}
+	response := r.Body.String()
+	jsonerr := json.Unmarshal([]byte(response), &actualUser)
+
+	assert.Nil(suite.T(), err)
+	assert.Nil(suite.T(), jsonerr)
+	assert.Equal(suite.T(), http.StatusOK, r.Code)
+	assert.Equal(suite.T(), user.Name, actualUser.Name)
+	assert.Equal(suite.T(), user.Username, actualUser.Username)
+	assert.Equal(suite.T(), user.Password, actualUser.Password)
+
+}
+
+func (suite UserControllerTestSuite) TestUpdateUserApi_FailedBindingAndNoId() {
+	suite.useCaseMock.On("Update").Return(model.Menu{}, errors.New("failed"))
+
+	controller.NewUserController(suite.useCaseMock, suite.routerMock)
+
+	r := httptest.NewRecorder()
+
+	request, _ := http.NewRequest(http.MethodPut, "/user/asdf", nil)
+	request.Header.Add("Authorization", "Bearer "+token)
+	suite.routerMock.ServeHTTP(r, request)
+
+	var actualUser = model.User{}
+	response := r.Body.String()
+	json.Unmarshal([]byte(response), &actualUser)
+
+	assert.Equal(suite.T(), http.StatusBadRequest, r.Code)
+	assert.Equal(suite.T(), model.User{}, actualUser)
+
+	r = httptest.NewRecorder()
+	request, _ = http.NewRequest(http.MethodPut, "/user/", nil)
+	request.Header.Add("Authorization", "Bearer "+token)
+	suite.routerMock.ServeHTTP(r, request)
+
+	response = r.Body.String()
+	json.Unmarshal([]byte(response), &actualUser)
+
+	assert.Equal(suite.T(), http.StatusNotFound, r.Code)
+	assert.Equal(suite.T(), model.User{}, actualUser)
+}
+
+func (suite UserControllerTestSuite) TestUpdateUserApi_Failed() {
+	user := dummyUsers[0]
+
+	suite.useCaseMock.On("Update", &user).Return(model.Menu{}, errors.New("failed"))
+
+	controller.NewUserController(suite.useCaseMock, suite.routerMock)
+
+	r := httptest.NewRecorder()
+
+	reqBody, _ := json.Marshal(user)
+	request, _ := http.NewRequest(http.MethodPut, "/user/"+user.Id, bytes.NewBuffer(reqBody))
+	request.Header.Add("Authorization", "Bearer "+token)
+	suite.routerMock.ServeHTTP(r, request)
+
+	var actualUser = model.User{}
+	response := r.Body.String()
+	json.Unmarshal([]byte(response), &actualUser)
+
+	assert.Equal(suite.T(), http.StatusBadGateway, r.Code)
+	assert.Equal(suite.T(), model.User{}, actualUser)
+}
+
+func (suite UserControllerTestSuite) TestDeleteUserApi_Success() {
+	user := dummyUsers[0]
+
+	suite.useCaseMock.On("GetById", user.Id).Return(user, nil)
+	suite.useCaseMock.On("Delete", user.Id).Return(nil)
+
+	controller.NewUserController(suite.useCaseMock, suite.routerMock)
+
+	r := httptest.NewRecorder()
+	request, _ := http.NewRequest(http.MethodDelete, "/user/"+user.Id, nil)
+	request.Header.Add("Authorization", "Bearer "+token)
+	suite.routerMock.ServeHTTP(r, request)
+
+	assert.Equal(suite.T(), http.StatusOK, r.Code)
+
+}
+
+func (suite UserControllerTestSuite) TestDeleteUserApi_FailedNotFound() {
+	user := dummyUsers[0]
+
+	suite.useCaseMock.On("GetById", user.Id).Return(model.User{}, errors.New("not found"))
+	suite.useCaseMock.On("Delete", user.Id).Return(errors.New("failed"))
+
+	controller.NewUserController(suite.useCaseMock, suite.routerMock)
+
+	r := httptest.NewRecorder()
+	request, _ := http.NewRequest(http.MethodDelete, "/user/"+user.Id, nil)
+	request.Header.Add("Authorization", "Bearer "+token)
+	suite.routerMock.ServeHTTP(r, request)
+
+	assert.Equal(suite.T(), http.StatusBadRequest, r.Code)
+
+}
+
+func (suite UserControllerTestSuite) TestDeleteUserApi_Failed() {
+	user := dummyUsers[0]
+
+	suite.useCaseMock.On("GetById", user.Id).Return(user, nil)
+	suite.useCaseMock.On("Delete", user.Id).Return(errors.New("failed"))
+
+	controller.NewUserController(suite.useCaseMock, suite.routerMock)
+
+	r := httptest.NewRecorder()
+	request, _ := http.NewRequest(http.MethodDelete, "/user/"+user.Id, nil)
+	request.Header.Add("Authorization", "Bearer "+token)
+	suite.routerMock.ServeHTTP(r, request)
+
+	assert.Equal(suite.T(), http.StatusBadGateway, r.Code)
 
 }
 

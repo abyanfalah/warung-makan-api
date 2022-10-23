@@ -95,6 +95,31 @@ func (c *UserController) CreateNewUser(ctx *gin.Context) {
 	utils.JsonDataMessageResponse(ctx, user, "user created")
 }
 
+func (c *UserController) CreateNewUserNoImage(ctx *gin.Context) {
+	var user model.User
+
+	err := ctx.ShouldBindJSON(&user)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+			"data":  user,
+		})
+		return
+	}
+	// id := utils.GenerateId()
+
+	// user.Id = id
+	// user.Image = id + ".jpg"
+	user, err = c.usecase.Insert(&user)
+	if err != nil {
+		utils.JsonErrorBadGateway(ctx, err, "insert failed")
+		return
+	}
+
+	// utils.JsonDataMessageResponse(ctx, &user, "user created")
+	utils.JsonDataResponse(ctx, user)
+}
+
 func (c *UserController) UpdateUser(ctx *gin.Context) {
 	var user model.User
 
@@ -111,7 +136,7 @@ func (c *UserController) UpdateUser(ctx *gin.Context) {
 		return
 	}
 
-	utils.JsonDataMessageResponse(ctx, updatedUser, "user updated")
+	utils.JsonDataResponse(ctx, updatedUser)
 }
 
 func (c *UserController) DeleteUser(ctx *gin.Context) {
@@ -159,6 +184,7 @@ func NewUserController(usecase usecase.UserUsecase, router *gin.Engine) *UserCon
 
 	protectedRoute := router.Group("/user", authMiddleware.RequireToken())
 	protectedRoute.POST("/", controller.CreateNewUser)
+	protectedRoute.POST("/no_image", controller.CreateNewUserNoImage)
 	protectedRoute.PUT("/:id", controller.UpdateUser)
 	protectedRoute.DELETE("/:id", controller.DeleteUser)
 
