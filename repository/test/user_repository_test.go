@@ -211,7 +211,6 @@ func (suite *UserRepositoryTestSuite) TestInsertUser_Failed() {
 func (suite *UserRepositoryTestSuite) TestUpdateUser_Success() {
 	var dummy = dummyUsers[0]
 
-	// suite.mockSql.ExpectExec(utils.USER_UPDATE_TEST).WithArgs(dummy.Id, dummy.Name, dummy.Username, dummy.Password, dummy.Image).WillReturnResult(sqlmock.NewResult(1, 1))
 	suite.mockSql.ExpectExec(regexp.QuoteMeta(utils.USER_UPDATE_TEST)).WithArgs(dummy.Name, dummy.Username, dummy.Password, dummy.Id).WillReturnResult(sqlmock.NewResult(1, 1))
 
 	repo := repository.NewUserRepository(suite.mockSqlxDb)
