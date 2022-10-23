@@ -93,10 +93,6 @@ func (c *UserController) CreateNewUser(ctx *gin.Context) {
 	}
 
 	utils.JsonDataMessageResponse(ctx, user, "user created")
-	ctx.JSON(200, gin.H{
-		"uid": user.Id,
-		"id":  id,
-	})
 }
 
 func (c *UserController) UpdateUser(ctx *gin.Context) {

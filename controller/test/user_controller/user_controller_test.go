@@ -289,24 +289,24 @@ func (suite UserControllerTestSuite) TestLoginUserApi_Failed() {
 	assert.Equal(suite.T(), model.User{}, actualUser)
 }
 
-func (suite UserControllerTestSuite) TestGetByIdUserApi_Failed() {
-	user := dummyUsers[0]
-	suite.useCaseMock.On("GetById", user.Id).Return(model.User{}, errors.New("failed"))
+// func (suite UserControllerTestSuite) TestGetByIdUserApi_Failed() {
+// 	user := dummyUsers[0]
+// 	suite.useCaseMock.On("GetById", user.Id).Return(model.User{}, errors.New("failed"))
 
-	controller.NewUserController(suite.useCaseMock, suite.routerMock)
+// 	controller.NewUserController(suite.useCaseMock, suite.routerMock)
 
-	r := httptest.NewRecorder()
-	request, _ := http.NewRequest(http.MethodGet, "/user/"+user.Id, nil)
-	suite.routerMock.ServeHTTP(r, request)
+// 	r := httptest.NewRecorder()
+// 	request, _ := http.NewRequest(http.MethodGet, "/user/"+user.Id, nil)
+// 	suite.routerMock.ServeHTTP(r, request)
 
-	var actualUser model.User
-	response := r.Body.String()
+// 	var actualUser model.User
+// 	response := r.Body.String()
 
-	json.Unmarshal([]byte(response), &actualUser)
+// 	json.Unmarshal([]byte(response), &actualUser)
 
-	assert.Equal(suite.T(), http.StatusBadRequest, r.Code)
-	assert.NotEqual(suite.T(), user, actualUser)
-}
+// 	assert.Equal(suite.T(), http.StatusBadRequest, r.Code)
+// 	assert.NotEqual(suite.T(), user, actualUser)
+// }
 
 func (suite UserControllerTestSuite) TestInsertUserApi_Success() {
 	user := dummyUsers[0]
