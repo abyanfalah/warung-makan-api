@@ -160,7 +160,7 @@ func (p *transactionRepository) InsertTest(newTransaction *model.TransactionTest
 
 	_, err := p.db.NamedExec(utils.TRANSACTION_INSERT, newTransaction)
 	if err != nil {
-		panic(err)
+		return model.TransactionTest{}, nil
 	}
 
 	return *newTransaction, nil

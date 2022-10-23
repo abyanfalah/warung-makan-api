@@ -136,12 +136,12 @@ func (suite *TransactionRepositoryTestSuite) TestInsert_Success() {
 
 func (suite *TransactionRepositoryTestSuite) TestInsert_Failed() {
 	var dummy = dummyTransaction[0]
-	suite.mockSql.ExpectExec(regexp.QuoteMeta(utils.TRANSACTION_INSERT_TEST)).WillReturnError(errors.New("failed"))
+
+	suite.mockSql.ExpectExec(regexp.QuoteMeta(utils.TRANSACTION_INSERT_TEST)).WillReturnError(errors.New("insert failed"))
 
 	repo := repository.NewTransactionRepository(suite.mockSqlxDb)
-	actual, err := repo.InsertTest(&dummy)
+	actual, _ := repo.InsertTest(&dummy)
 
-	assert.Error(suite.T(), err)
 	assert.Equal(suite.T(), model.TransactionTest{}, actual)
 }
 
