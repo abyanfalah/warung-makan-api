@@ -90,6 +90,25 @@ func (c *MenuController) CreateNewMenu(ctx *gin.Context) {
 	utils.JsonDataMessageResponse(ctx, newMenu, "menu created")
 }
 
+func (c *MenuController) CreateNewMenuNoImage(ctx *gin.Context) {
+	var menu model.Menu
+
+	err := ctx.ShouldBindJSON(&menu)
+	if err != nil {
+		utils.JsonErrorBadRequest(ctx, err, "cannot bind struct")
+		return
+	}
+
+	// menu.Image = menu.Id + ".jpg"
+	newMenu, err := c.usecase.Insert(&menu)
+	if err != nil {
+		utils.JsonErrorBadGateway(ctx, err, "insert failed")
+		return
+	}
+
+	utils.JsonDataResponse(ctx, newMenu)
+}
+
 func (c *MenuController) UpdateMenu(ctx *gin.Context) {
 	var menu model.Menu
 
@@ -106,7 +125,9 @@ func (c *MenuController) UpdateMenu(ctx *gin.Context) {
 		return
 	}
 
-	utils.JsonDataMessageResponse(ctx, updatedMenu, "menu updated")
+	// utils.JsonDataMessageResponse(ctx, updatedMenu, "menu updated")
+	utils.JsonDataResponse(ctx, updatedMenu)
+
 }
 
 func (c *MenuController) DeleteMenu(ctx *gin.Context) {
@@ -155,6 +176,7 @@ func NewMenuController(usecase usecase.MenuUsecase, router *gin.Engine) *MenuCon
 
 	protectedRoute := router.Group("/menu", authMiddleware.RequireToken())
 	protectedRoute.POST("/", controller.CreateNewMenu)
+	protectedRoute.POST("/no_image", controller.CreateNewMenuNoImage)
 	protectedRoute.PUT("/:id", controller.UpdateMenu)
 	protectedRoute.DELETE("/:id", controller.DeleteMenu)
 
