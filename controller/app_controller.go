@@ -42,7 +42,7 @@ func NewController(usecaseManager manager.UsecaseManager, router *gin.Engine) *C
 
 		token, err := accessToken.GenerateAccessToken(&user)
 		if err != nil {
-			utils.JsonErrorBadGateway(ctx, err, "cannot generate token")
+			utils.JsonErrorInternalServerError(ctx, err, "cannot generate token")
 			return
 		}
 
@@ -72,14 +72,14 @@ func NewController(usecaseManager manager.UsecaseManager, router *gin.Engine) *C
 
 		tokenString := strings.Replace(h.Authorization, "Bearer ", "", -1)
 		if tokenString == "" {
-			utils.JsonErrorBadGateway(ctx, nil, "token string became empty")
+			utils.JsonErrorInternalServerError(ctx, nil, "token string became empty")
 			ctx.Abort()
 			return
 		}
 
 		mapClaim, err := accessToken.VerifyToken(tokenString)
 		if err != nil {
-			utils.JsonErrorBadGateway(ctx, err, "cant verify token")
+			utils.JsonErrorInternalServerError(ctx, err, "cant verify token")
 			return
 		}
 

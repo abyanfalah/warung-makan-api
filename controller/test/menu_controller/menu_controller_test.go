@@ -153,7 +153,7 @@ func (suite MenuControllerTestSuite) TestGetAllMenuApi_Failed() {
 	response := r.Body.String()
 	jsonerr := json.Unmarshal([]byte(response), &errorResponse)
 
-	assert.Equal(suite.T(), http.StatusBadGateway, r.Code)
+	assert.Equal(suite.T(), http.StatusInternalServerError, r.Code)
 	assert.Equal(suite.T(), "failed", errorResponse.Error)
 	assert.Nil(suite.T(), jsonerr)
 
@@ -299,7 +299,7 @@ func (suite MenuControllerTestSuite) TestInsertMenuNoImageApi_Failed() {
 	response := r.Body.String()
 	json.Unmarshal([]byte(response), &actualMenu)
 
-	assert.Equal(suite.T(), http.StatusBadGateway, r.Code)
+	assert.Equal(suite.T(), http.StatusInternalServerError, r.Code)
 }
 
 func (suite MenuControllerTestSuite) TestUpdateMenuApi_Success() {
@@ -374,7 +374,7 @@ func (suite MenuControllerTestSuite) TestUpdateMenuApi_Failed() {
 	response := r.Body.String()
 	json.Unmarshal([]byte(response), &actualMenu)
 
-	assert.Equal(suite.T(), http.StatusBadGateway, r.Code)
+	assert.Equal(suite.T(), http.StatusInternalServerError, r.Code)
 	assert.Equal(suite.T(), model.Menu{}, actualMenu)
 }
 
@@ -425,7 +425,7 @@ func (suite MenuControllerTestSuite) TestDeleteMenuApi_Failed() {
 	request.Header.Add("Authorization", "Bearer "+token)
 	suite.routerMock.ServeHTTP(r, request)
 
-	assert.Equal(suite.T(), http.StatusBadGateway, r.Code)
+	assert.Equal(suite.T(), http.StatusInternalServerError, r.Code)
 
 }
 

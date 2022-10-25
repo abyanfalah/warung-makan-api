@@ -36,7 +36,7 @@ func (atm *authTokenMiddleware) RequireToken() gin.HandlerFunc {
 
 		tokenString := strings.Replace(headerAuth.Authorization, "Bearer ", "", -1)
 		if tokenString == "" {
-			utils.JsonErrorBadGateway(ctx, nil, "token string became empty")
+			utils.JsonErrorInternalServerError(ctx, nil, "token string became empty")
 			ctx.Abort()
 			return
 		}

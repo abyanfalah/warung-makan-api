@@ -22,7 +22,7 @@ type TransactionController struct {
 func (c *TransactionController) ListTransaction(ctx *gin.Context) {
 	list, err := c.usecase.GetAll()
 	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "cannot get transaction list")
+		utils.JsonErrorInternalServerError(ctx, err, "cannot get transaction list")
 		return
 	}
 
@@ -73,7 +73,7 @@ func (c *TransactionController) CreateNewTransaction(ctx *gin.Context) {
 
 	newTransaction, err := c.usecase.Insert(&transaction)
 	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "insert failed")
+		utils.JsonErrorInternalServerError(ctx, err, "insert failed")
 		return
 	}
 
@@ -92,7 +92,7 @@ func (c *TransactionController) CreateNewTransaction(ctx *gin.Context) {
 // 	transaction.Id = ctx.Param("id")
 // 	updatedTransaction, err := c.usecase.Update(&transaction)
 // 	if err != nil {
-// 		utils.JsonErrorBadGateway(ctx, err, "update failed")
+// 		utils.JsonErrorInternalServerError(ctx, err, "update failed")
 // 		return
 // 	}
 
@@ -108,7 +108,7 @@ func (c *TransactionController) CreateNewTransaction(ctx *gin.Context) {
 
 // 	err = c.usecase.Delete(transaction.Id)
 // 	if err != nil {
-// 		utils.JsonErrorBadGateway(ctx, err, "cannot delete transaction")
+// 		utils.JsonErrorInternalServerError(ctx, err, "cannot delete transaction")
 // 	}
 
 // 	utils.JsonSuccessMessage(ctx, "Transaction deleted")

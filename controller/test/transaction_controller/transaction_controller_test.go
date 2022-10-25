@@ -151,7 +151,7 @@ func (suite TransactionControllerTestSuite) TestGetAllTransactionApi_Failed() {
 	response := r.Body.String()
 	jsonerr := json.Unmarshal([]byte(response), &errorResponse)
 
-	assert.Equal(suite.T(), http.StatusBadGateway, r.Code)
+	assert.Equal(suite.T(), http.StatusInternalServerError, r.Code)
 	assert.Equal(suite.T(), "failed", errorResponse.Error)
 	assert.Nil(suite.T(), jsonerr)
 
@@ -261,7 +261,7 @@ func (suite TransactionControllerTestSuite) TestInsertTransactionApi_Success() {
 // 	response := r.Body.String()
 // 	json.Unmarshal([]byte(response), &actualMenu)
 
-// 	assert.Equal(suite.T(), http.StatusBadGateway, r.Code)
+// 	assert.Equal(suite.T(), http.StatusInternalServerError, r.Code)
 // }
 
 func TestMenuControllerTestSuite(t *testing.T) {

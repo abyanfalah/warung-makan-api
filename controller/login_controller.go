@@ -34,7 +34,7 @@ func (lc *LoginController) Login(ctx *gin.Context) {
 
 	token, err := accessToken.GenerateAccessToken(&user)
 	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "cannot generate token")
+		utils.JsonErrorInternalServerError(ctx, err, "cannot generate token")
 		return
 	}
 
@@ -63,7 +63,7 @@ func (lc *LoginController) LoginTest(ctx *gin.Context) {
 
 	_, err = accessToken.GenerateAccessToken(&user)
 	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "cannot generate token")
+		utils.JsonErrorInternalServerError(ctx, err, "cannot generate token")
 		return
 	}
 

@@ -39,7 +39,7 @@ func (c *UserController) ListUser(ctx *gin.Context) {
 
 	list, err := c.usecase.GetAll()
 	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "cannot get user list")
+		utils.JsonErrorInternalServerError(ctx, err, "cannot get user list")
 		return
 	}
 
@@ -80,7 +80,7 @@ func (c *UserController) CreateNewUser(ctx *gin.Context) {
 	imagePath := "./images/user/" + id + ".jpg"
 	err = ctx.SaveUploadedFile(imageFile, imagePath)
 	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "cannot save image")
+		utils.JsonErrorInternalServerError(ctx, err, "cannot save image")
 		return
 	}
 
@@ -88,7 +88,7 @@ func (c *UserController) CreateNewUser(ctx *gin.Context) {
 	user.Image = id + ".jpg"
 	user, err = c.usecase.Insert(&user)
 	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "insert failed")
+		utils.JsonErrorInternalServerError(ctx, err, "insert failed")
 		return
 	}
 
@@ -112,7 +112,7 @@ func (c *UserController) CreateNewUserNoImage(ctx *gin.Context) {
 	// user.Image = id + ".jpg"
 	user, err = c.usecase.Insert(&user)
 	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "insert failed")
+		utils.JsonErrorInternalServerError(ctx, err, "insert failed")
 		return
 	}
 
@@ -132,7 +132,7 @@ func (c *UserController) UpdateUser(ctx *gin.Context) {
 	user.Id = ctx.Param("id")
 	updatedUser, err := c.usecase.Update(&user)
 	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "update failed")
+		utils.JsonErrorInternalServerError(ctx, err, "update failed")
 		return
 	}
 
@@ -148,7 +148,7 @@ func (c *UserController) DeleteUser(ctx *gin.Context) {
 
 	err = c.usecase.Delete(user.Id)
 	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "cannot delete user")
+		utils.JsonErrorInternalServerError(ctx, err, "cannot delete user")
 		return
 	}
 

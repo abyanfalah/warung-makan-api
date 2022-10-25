@@ -36,14 +36,15 @@ func JsonBadRequestMessage(ctx *gin.Context, message string) {
 	})
 }
 
-func JsonBadGatewayMessage(ctx *gin.Context, message string) {
-	ctx.AbortWithStatusJSON(http.StatusBadGateway, gin.H{
+func JsonInternalServerErrorMessage(ctx *gin.Context, message string) {
+	ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 		"message": message,
 	})
+
 }
 
-func JsonErrorBadGateway(ctx *gin.Context, err error, message string) {
-	ctx.AbortWithStatusJSON(http.StatusBadGateway, gin.H{
+func JsonErrorInternalServerError(ctx *gin.Context, err error, message string) {
+	ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 		"error":   err.Error(),
 		"message": message,
 	})

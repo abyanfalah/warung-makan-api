@@ -39,7 +39,7 @@ func (c *MenuController) ListMenu(ctx *gin.Context) {
 
 	list, err := c.usecase.GetAll()
 	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "cannot get menu list")
+		utils.JsonErrorInternalServerError(ctx, err, "cannot get menu list")
 		return
 	}
 
@@ -76,14 +76,14 @@ func (c *MenuController) CreateNewMenu(ctx *gin.Context) {
 	imagePath := "./images/menu/" + menu.Id + ".jpg"
 	err = ctx.SaveUploadedFile(imageFile, imagePath)
 	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "cannot save image")
+		utils.JsonErrorInternalServerError(ctx, err, "cannot save image")
 		return
 	}
 
 	menu.Image = menu.Id + ".jpg"
 	newMenu, err := c.usecase.Insert(&menu)
 	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "insert failed")
+		utils.JsonErrorInternalServerError(ctx, err, "insert failed")
 		return
 	}
 
@@ -102,7 +102,7 @@ func (c *MenuController) CreateNewMenuNoImage(ctx *gin.Context) {
 	// menu.Image = menu.Id + ".jpg"
 	newMenu, err := c.usecase.Insert(&menu)
 	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "insert failed")
+		utils.JsonErrorInternalServerError(ctx, err, "insert failed")
 		return
 	}
 
@@ -121,7 +121,7 @@ func (c *MenuController) UpdateMenu(ctx *gin.Context) {
 	menu.Id = ctx.Param("id")
 	updatedMenu, err := c.usecase.Update(&menu)
 	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "update failed")
+		utils.JsonErrorInternalServerError(ctx, err, "update failed")
 		return
 	}
 
@@ -139,7 +139,7 @@ func (c *MenuController) DeleteMenu(ctx *gin.Context) {
 
 	err = c.usecase.Delete(menu.Id)
 	if err != nil {
-		utils.JsonErrorBadGateway(ctx, err, "cannot delete menu")
+		utils.JsonErrorInternalServerError(ctx, err, "cannot delete menu")
 		return
 	}
 

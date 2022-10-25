@@ -153,7 +153,7 @@ func (suite UserControllerTestSuite) TestGetAllUserApi_Failed() {
 	response := r.Body.String()
 	jsonerr := json.Unmarshal([]byte(response), &errorResponse)
 
-	assert.Equal(suite.T(), http.StatusBadGateway, r.Code)
+	assert.Equal(suite.T(), http.StatusInternalServerError, r.Code)
 	assert.Equal(suite.T(), "failed", errorResponse.Error)
 	assert.Nil(suite.T(), jsonerr)
 
@@ -355,7 +355,7 @@ func (suite UserControllerTestSuite) TestInsertUserNoImageApi_Failed() {
 	response := r.Body.String()
 	json.Unmarshal([]byte(response), &actualUser)
 
-	assert.Equal(suite.T(), http.StatusBadGateway, r.Code)
+	assert.Equal(suite.T(), http.StatusInternalServerError, r.Code)
 }
 
 func (suite UserControllerTestSuite) TestUpdateUserApi_Success() {
@@ -433,7 +433,7 @@ func (suite UserControllerTestSuite) TestUpdateUserApi_Failed() {
 	response := r.Body.String()
 	json.Unmarshal([]byte(response), &actualUser)
 
-	assert.Equal(suite.T(), http.StatusBadGateway, r.Code)
+	assert.Equal(suite.T(), http.StatusInternalServerError, r.Code)
 	assert.Equal(suite.T(), model.User{}, actualUser)
 }
 
@@ -484,7 +484,7 @@ func (suite UserControllerTestSuite) TestDeleteUserApi_Failed() {
 	request.Header.Add("Authorization", "Bearer "+token)
 	suite.routerMock.ServeHTTP(r, request)
 
-	assert.Equal(suite.T(), http.StatusBadGateway, r.Code)
+	assert.Equal(suite.T(), http.StatusInternalServerError, r.Code)
 
 }
 
