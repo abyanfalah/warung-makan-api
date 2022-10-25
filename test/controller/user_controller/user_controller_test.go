@@ -195,7 +195,7 @@ func (suite UserControllerTestSuite) TestGetByIdUserApi_Failed() {
 
 	json.Unmarshal([]byte(response), &actualUser)
 
-	assert.Equal(suite.T(), http.StatusBadRequest, r.Code)
+	assert.Equal(suite.T(), http.StatusNotFound, r.Code)
 	assert.NotEqual(suite.T(), user, actualUser)
 }
 
@@ -234,7 +234,7 @@ func (suite UserControllerTestSuite) TestGetByNameUserApi_Failed() {
 	response := r.Body.String()
 	jsonerr := json.Unmarshal([]byte(response), &errorResponse)
 
-	assert.Equal(suite.T(), http.StatusBadRequest, r.Code)
+	assert.Equal(suite.T(), http.StatusNotFound, r.Code)
 	assert.Equal(suite.T(), "failed", errorResponse.Error)
 	assert.Nil(suite.T(), jsonerr)
 }
@@ -467,7 +467,7 @@ func (suite UserControllerTestSuite) TestDeleteUserApi_FailedNotFound() {
 	request.Header.Add("Authorization", "Bearer "+token)
 	suite.routerMock.ServeHTTP(r, request)
 
-	assert.Equal(suite.T(), http.StatusBadRequest, r.Code)
+	assert.Equal(suite.T(), http.StatusNotFound, r.Code)
 
 }
 

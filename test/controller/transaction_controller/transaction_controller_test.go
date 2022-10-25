@@ -194,7 +194,7 @@ func (suite TransactionControllerTestSuite) TestGetByIdTransactionApi_Failed() {
 	response := r.Body.String()
 	jsonerr := json.Unmarshal([]byte(response), &actualTransaction)
 
-	assert.Equal(suite.T(), http.StatusBadRequest, r.Code)
+	assert.Equal(suite.T(), http.StatusNotFound, r.Code)
 	assert.Nil(suite.T(), jsonerr)
 	assert.Equal(suite.T(), model.Transaction{}, actualTransaction)
 }
@@ -221,8 +221,6 @@ func (suite TransactionControllerTestSuite) TestInsertTransactionApi_Success() {
 	assert.Equal(suite.T(), http.StatusOK, r.Code)
 	assert.Nil(suite.T(), jsonerr)
 	assert.Equal(suite.T(), transaction, actualTransaction)
-	return
-
 }
 
 // func (suite TransactionControllerTestSuite) TestInsertTransactionApi_FailedBinding() {
