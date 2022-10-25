@@ -24,7 +24,7 @@ func (c *MenuController) ListMenu(ctx *gin.Context) {
 		menu, err := c.usecase.GetByName(ctx.Query("name"))
 
 		if err != nil {
-			utils.JsonErrorBadRequest(ctx, err, "cannot get list")
+			utils.JsonErrorNotFound(ctx, err, "cannot get list")
 			return
 		}
 
@@ -49,7 +49,7 @@ func (c *MenuController) ListMenu(ctx *gin.Context) {
 func (c *MenuController) GetById(ctx *gin.Context) {
 	menu, err := c.usecase.GetById(ctx.Param("id"))
 	if err != nil {
-		utils.JsonErrorBadRequest(ctx, err, "cannot get menu")
+		utils.JsonErrorNotFound(ctx, err, "cannot get menu")
 		return
 	}
 
@@ -156,7 +156,7 @@ func (c *MenuController) GetMenuImage(ctx *gin.Context) {
 	imagePath := "./images/menu/" + id + ".jpg"
 	if _, err := os.Stat(imagePath); err != nil {
 		// ctx.File("./images/menu/default.jpg")
-		utils.JsonErrorBadRequest(ctx, err, imagePath)
+		utils.JsonErrorNotFound(ctx, err, imagePath)
 		return
 	}
 

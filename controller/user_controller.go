@@ -24,7 +24,7 @@ func (c *UserController) ListUser(ctx *gin.Context) {
 		user, err := c.usecase.GetByName(ctx.Query("name"))
 
 		if err != nil {
-			utils.JsonErrorBadRequest(ctx, err, "cannot get list")
+			utils.JsonErrorNotFound(ctx, err, "cannot get list")
 			return
 		}
 
@@ -49,7 +49,7 @@ func (c *UserController) ListUser(ctx *gin.Context) {
 func (c *UserController) GetById(ctx *gin.Context) {
 	user, err := c.usecase.GetById(ctx.Param("id"))
 	if err != nil {
-		utils.JsonErrorBadRequest(ctx, err, "cannot get user")
+		utils.JsonErrorNotFound(ctx, err, "cannot get user")
 		return
 	}
 
@@ -142,7 +142,7 @@ func (c *UserController) UpdateUser(ctx *gin.Context) {
 func (c *UserController) DeleteUser(ctx *gin.Context) {
 	user, err := c.usecase.GetById(ctx.Param("id"))
 	if err != nil {
-		utils.JsonErrorBadRequest(ctx, err, "user not found")
+		utils.JsonErrorNotFound(ctx, err, "user not found")
 		return
 	}
 
@@ -164,7 +164,7 @@ func (c *UserController) GetUserImage(ctx *gin.Context) {
 	id := ctx.Param("id")
 	imagePath := "./images/user/" + id + ".jpg"
 	if _, err := os.Stat(imagePath); err != nil {
-		utils.JsonErrorBadRequest(ctx, err, imagePath)
+		utils.JsonErrorNotFound(ctx, err, imagePath)
 		return
 	}
 

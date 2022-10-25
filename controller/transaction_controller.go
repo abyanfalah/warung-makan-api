@@ -32,7 +32,7 @@ func (c *TransactionController) ListTransaction(ctx *gin.Context) {
 func (c *TransactionController) GetById(ctx *gin.Context) {
 	transaction, err := c.usecase.GetById(ctx.Param("id"))
 	if err != nil {
-		utils.JsonErrorBadRequest(ctx, err, "cannot get transaction")
+		utils.JsonErrorNotFound(ctx, err, "cannot get transaction")
 		return
 	}
 
