@@ -192,7 +192,6 @@ func (suite MenuControllerTestSuite) TestGetByIdMenuApi_Failed() {
 
 	var actualMenu model.Menu
 	response := r.Body.String()
-
 	json.Unmarshal([]byte(response), &actualMenu)
 
 	assert.Equal(suite.T(), http.StatusBadRequest, r.Code)

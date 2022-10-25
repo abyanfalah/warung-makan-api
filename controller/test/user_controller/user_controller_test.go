@@ -46,11 +46,6 @@ type ErrorResponse struct {
 	Message string
 }
 
-type LoginResponse struct {
-	message string
-	token   string
-}
-
 type UserUsecaseMock struct {
 	mock.Mock
 }

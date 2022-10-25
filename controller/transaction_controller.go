@@ -23,6 +23,7 @@ func (c *TransactionController) ListTransaction(ctx *gin.Context) {
 	list, err := c.usecase.GetAll()
 	if err != nil {
 		utils.JsonErrorBadGateway(ctx, err, "cannot get transaction list")
+		return
 	}
 
 	utils.JsonDataResponse(ctx, list)
@@ -32,6 +33,7 @@ func (c *TransactionController) GetById(ctx *gin.Context) {
 	transaction, err := c.usecase.GetById(ctx.Param("id"))
 	if err != nil {
 		utils.JsonErrorBadRequest(ctx, err, "cannot get transaction")
+		return
 	}
 
 	utils.JsonDataResponse(ctx, transaction)
@@ -121,11 +123,9 @@ func NewTransactionController(usecase usecase.TransactionUsecase, menuUsecase us
 	authMiddleware := middleware.NewAuthTokenMiddleware(authenticator.NewAccessToken(config.NewConfig().TokenConfig))
 
 	protectedRoute := router.Group("/transaction", authMiddleware.RequireToken())
-	protectedRoute.GET("/", controller.ListTransaction)
+	protectedRoute.GET("", controller.ListTransaction)
 	protectedRoute.GET("/:id", controller.GetById)
-	protectedRoute.POST("/", controller.CreateNewTransaction)
-	// protectedRoute.PUT("/:id", controller.UpdateTransaction)
-	// protectedRoute.DELETE("/:id", controller.DeleteTransaction)
+	protectedRoute.POST("", controller.CreateNewTransaction)
 
 	return &controller
 }

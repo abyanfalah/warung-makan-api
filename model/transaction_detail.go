@@ -6,3 +6,8 @@ type TransactionDetail struct {
 	Qty           int    `json:"qty" binding:"required" db:"qty"`
 	Subtotal      int    `json:"subtotal" `
 }
+
+type ItemList struct {
+	MenuId string `json:"menu_id" binding:"required" db:"menu_id"`
+	Qty    int    `json:"qty" binding:"required" db:"qty"`
+}
