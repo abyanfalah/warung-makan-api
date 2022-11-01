@@ -1,4 +1,16 @@
 # warung-makan-api
+## Installation
+If you wish to run the app in localhost:
+```bash
+git clone https://github.com/abyanfalah/warung-makan-api.git
+
+cd warung-makan-api
+
+go build
+
+./warung-makan-api
+```
+
 
 ## Config
 Change the value of constants in main.go to suit your need.
